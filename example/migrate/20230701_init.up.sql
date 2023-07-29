@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS users (
+	id BIGINT PRIMARY KEY,
+	rule RRULE,
+	set RRULESET,
+	created_at TIMESTAMPTZ NOT NULL,
+	updated_at TIMESTAMPTZ NOT NULL
+);
+

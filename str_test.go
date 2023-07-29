@@ -8,6 +8,7 @@ import (
 )
 
 func TestRFCRuleToStr(t *testing.T) {
+	t.Parallel()
 	nyLoc, _ := time.LoadLocation("America/New_York")
 	dtStart := time.Date(2018, 1, 1, 9, 0, 0, 0, nyLoc)
 
@@ -19,6 +20,7 @@ func TestRFCRuleToStr(t *testing.T) {
 }
 
 func TestRFCSetToString(t *testing.T) {
+	t.Parallel()
 	nyLoc, _ := time.LoadLocation("America/New_York")
 	dtStart := time.Date(2018, 1, 1, 9, 0, 0, 0, nyLoc)
 
@@ -39,6 +41,7 @@ func TestRFCSetToString(t *testing.T) {
 }
 
 func TestCompatibility(t *testing.T) {
+	t.Parallel()
 	str := "FREQ=WEEKLY;DTSTART=20120201T093000Z;INTERVAL=5;WKST=TU;COUNT=2;UNTIL=20130130T230000Z;BYSETPOS=2;BYMONTH=3;BYYEARDAY=95;BYWEEKNO=1;BYDAY=MO,+2FR;BYHOUR=9;BYMINUTE=30;BYSECOND=0;BYEASTER=-1"
 	r, _ := StrToRRule(str)
 	want := "DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;INTERVAL=5;WKST=TU;COUNT=2;UNTIL=20130130T230000Z;BYSETPOS=2;BYMONTH=3;BYYEARDAY=95;BYWEEKNO=1;BYDAY=MO,+2FR;BYHOUR=9;BYMINUTE=30;BYSECOND=0;BYEASTER=-1"
@@ -52,6 +55,7 @@ func TestCompatibility(t *testing.T) {
 }
 
 func TestInvalidString(t *testing.T) {
+	t.Parallel()
 	cases := []string{
 		"",
 		"    ",
@@ -73,6 +77,7 @@ func TestInvalidString(t *testing.T) {
 }
 
 func TestSetStr(t *testing.T) {
+	t.Parallel()
 	setStr := "RRULE:FREQ=DAILY;UNTIL=20180517T235959Z\n" +
 		"EXDATE;VALUE=DATE-TIME:20180525T070000Z,20180530T130000Z\n" +
 		"RDATE;VALUE=DATE-TIME:20180801T131313Z,20180902T141414Z\n"
@@ -110,6 +115,7 @@ func TestSetStr(t *testing.T) {
 }
 
 func TestStrToDtStart(t *testing.T) {
+	t.Parallel()
 	validCases := []string{
 		"19970714T133000",
 		"19970714T173000Z",
@@ -145,6 +151,7 @@ func TestStrToDtStart(t *testing.T) {
 }
 
 func TestStrToDates(t *testing.T) {
+	t.Parallel()
 	validCases := []string{
 		"19970714T133000",
 		"19970714T173000Z",
@@ -182,6 +189,7 @@ func TestStrToDates(t *testing.T) {
 }
 
 func TestStrToDatesTimeIsCorrect(t *testing.T) {
+	t.Parallel()
 	nyLoc, _ := time.LoadLocation("America/New_York")
 	inputs := []string{
 		"VALUE=DATE-TIME:19970714T133000",
@@ -207,6 +215,7 @@ func TestStrToDatesTimeIsCorrect(t *testing.T) {
 }
 
 func TestProcessRRuleName(t *testing.T) {
+	t.Parallel()
 	validCases := []string{
 		"DTSTART;TZID=America/New_York:19970714T133000",
 		"RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,TU",
@@ -236,6 +245,7 @@ func TestProcessRRuleName(t *testing.T) {
 }
 
 func TestSetStrCompatibility(t *testing.T) {
+	t.Parallel()
 	badInputStrs := []string{
 		"",
 		"FREQ=DAILY;UNTIL=20180517T235959Z",
@@ -310,6 +320,7 @@ func TestSetStrCompatibility(t *testing.T) {
 }
 
 func TestSetParseLocalTimes(t *testing.T) {
+	t.Parallel()
 	moscow, _ := time.LoadLocation("Europe/Moscow")
 
 	t.Run("DtstartTimeZoneIsUsed", func(t *testing.T) {
@@ -379,6 +390,7 @@ func TestSetParseLocalTimes(t *testing.T) {
 }
 
 func TestRDateValueDateStr(t *testing.T) {
+	t.Parallel()
 	t.Run("DefaultToUTC", func(t *testing.T) {
 		input := []string{
 			"RDATE;VALUE=DATE:20180223",
@@ -410,6 +422,7 @@ func TestRDateValueDateStr(t *testing.T) {
 }
 
 func TestStrSetEmptySliceParse(t *testing.T) {
+	t.Parallel()
 	s, err := StrSliceToRRuleSet([]string{})
 	if err != nil {
 		t.Error(err)
@@ -420,6 +433,7 @@ func TestStrSetEmptySliceParse(t *testing.T) {
 }
 
 func TestStrSetParseErrors(t *testing.T) {
+	t.Parallel()
 	inputs := [][]string{
 		{"RRULE:XXX"},
 		{"RDATE;TZD=X:1"},

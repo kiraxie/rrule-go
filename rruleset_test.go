@@ -8,6 +8,7 @@ import (
 )
 
 func TestSet(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 2, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -21,6 +22,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestSetOverlapping(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -32,6 +34,7 @@ func TestSetOverlapping(t *testing.T) {
 }
 
 func TestSetString(t *testing.T) {
+	t.Parallel()
 	moscow, _ := time.LoadLocation("Europe/Moscow")
 	newYork, _ := time.LoadLocation("America/New_York")
 	tehran, _ := time.LoadLocation("Asia/Tehran")
@@ -60,6 +63,7 @@ EXDATE;TZID=America/New_York:19970918T050000`
 }
 
 func TestSetDTStart(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -95,6 +99,7 @@ EXDATE:19970918T090000Z`
 }
 
 func TestSetRecurrence(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -110,6 +115,7 @@ func TestSetRecurrence(t *testing.T) {
 }
 
 func TestSetDate(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -126,6 +132,7 @@ func TestSetDate(t *testing.T) {
 }
 
 func TestSetRDates(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -146,6 +153,7 @@ func TestSetRDates(t *testing.T) {
 }
 
 func TestSetExDate(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 6, Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -163,6 +171,7 @@ func TestSetExDate(t *testing.T) {
 }
 
 func TestSetExDates(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 6, Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -182,6 +191,7 @@ func TestSetExDates(t *testing.T) {
 }
 
 func TestSetExDateRevOrder(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Monthly, Count: 5, Bymonthday: []int{10},
 		Dtstart: time.Date(2004, 1, 1, 9, 0, 0, 0, time.UTC)})
@@ -198,6 +208,7 @@ func TestSetExDateRevOrder(t *testing.T) {
 }
 
 func TestSetDateAndExDate(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	set.RDate(time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC))
 	set.RDate(time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC))
@@ -218,6 +229,7 @@ func TestSetDateAndExDate(t *testing.T) {
 }
 
 func TestSetBefore(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -230,6 +242,7 @@ func TestSetBefore(t *testing.T) {
 }
 
 func TestSetBeforeInc(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -242,6 +255,7 @@ func TestSetBeforeInc(t *testing.T) {
 }
 
 func TestSetAfter(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -254,6 +268,7 @@ func TestSetAfter(t *testing.T) {
 }
 
 func TestSetAfterInc(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -266,6 +281,7 @@ func TestSetAfterInc(t *testing.T) {
 }
 
 func TestSetBetween(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -279,6 +295,7 @@ func TestSetBetween(t *testing.T) {
 }
 
 func TestSetBetweenInc(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -294,6 +311,7 @@ func TestSetBetweenInc(t *testing.T) {
 }
 
 func TestSetTrickyTimeZones(t *testing.T) {
+	t.Parallel()
 	set := Set{}
 
 	moscow, _ := time.LoadLocation("Europe/Moscow")
@@ -320,6 +338,7 @@ func TestSetTrickyTimeZones(t *testing.T) {
 }
 
 func TestSetDtStart(t *testing.T) {
+	t.Parallel()
 	ogr := []string{"DTSTART;TZID=America/Los_Angeles:20181115T000000", "RRULE:FREQ=DAILY;INTERVAL=1;WKST=SU;UNTIL=20181117T235959"}
 	set, _ := StrSliceToRRuleSet(ogr)
 
@@ -339,6 +358,7 @@ func TestSetDtStart(t *testing.T) {
 }
 
 func TestRuleSetChangeDTStartTimezoneRespected(t *testing.T) {
+	t.Parallel()
 	/*
 		https://golang.org/pkg/time/#LoadLocation
 

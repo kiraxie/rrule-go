@@ -20,6 +20,7 @@ func timesEqual(value, want []time.Time) bool {
 }
 
 func TestNoDtstart(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly})
 	if time.Now().Unix()-r.dtstart.Unix() > 1 {
 		t.Errorf(`default Dtstart shold be time.Now(), but got %s`, r.dtstart.Format(time.RFC3339))
@@ -27,6 +28,7 @@ func TestNoDtstart(t *testing.T) {
 }
 
 func TestBadBySetPos(t *testing.T) {
+	t.Parallel()
 	_, e := NewRRule(ROption{Freq: Monthly, Count: 1, Bysetpos: []int{0},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	if e == nil {
@@ -35,6 +37,7 @@ func TestBadBySetPos(t *testing.T) {
 }
 
 func TestBadBySetPosMany(t *testing.T) {
+	t.Parallel()
 	_, e := NewRRule(ROption{Freq: Monthly, Count: 1, Bysetpos: []int{-1, 0, 1},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	if e == nil {
@@ -43,6 +46,7 @@ func TestBadBySetPosMany(t *testing.T) {
 }
 
 func TestByNegativeMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{-1},
@@ -57,6 +61,7 @@ func TestByNegativeMonthDay(t *testing.T) {
 }
 
 func TestMonthlyMaxYear(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly, Interval: 15,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 	})
@@ -68,6 +73,7 @@ func TestMonthlyMaxYear(t *testing.T) {
 }
 
 func TestWeeklyMaxYear(t *testing.T) {
+	t.Parallel()
 	// Purposefully doesn't match anything for code coverage.
 	r, _ := NewRRule(ROption{Freq: Weekly, Bymonthday: []int{31},
 		Byyearday: []int{1}, Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -80,6 +86,7 @@ func TestWeeklyMaxYear(t *testing.T) {
 }
 
 func TestInvalidRRules(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		desc    string
 		rrule   ROption
@@ -213,6 +220,7 @@ func TestInvalidRRules(t *testing.T) {
 }
 
 func TestHourlyInvalidAndRepeatedBysetpos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly, Bysetpos: []int{1, -1, 2},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 2, 11, 0, 0, 0, time.UTC)})
@@ -226,6 +234,7 @@ func TestHourlyInvalidAndRepeatedBysetpos(t *testing.T) {
 }
 
 func TestNoAfter(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -239,6 +248,7 @@ func TestNoAfter(t *testing.T) {
 // Test cases from Python Dateutil
 
 func TestYearly(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -252,6 +262,7 @@ func TestYearly(t *testing.T) {
 }
 
 func TestYearlyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Interval: 2,
@@ -266,6 +277,7 @@ func TestYearlyInterval(t *testing.T) {
 }
 
 func TestYearlyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Interval: 100,
@@ -280,6 +292,7 @@ func TestYearlyIntervalLarge(t *testing.T) {
 }
 
 func TestYearlyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -294,6 +307,7 @@ func TestYearlyByMonth(t *testing.T) {
 }
 
 func TestYearlyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -308,6 +322,7 @@ func TestYearlyByMonthDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -323,6 +338,7 @@ func TestYearlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestYearlyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -337,6 +353,7 @@ func TestYearlyByWeekDay(t *testing.T) {
 }
 
 func TestYearlyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -351,6 +368,7 @@ func TestYearlyByNWeekDay(t *testing.T) {
 }
 
 func TestYearlyByNWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(3), Thursday.Nth(-3)},
@@ -365,6 +383,7 @@ func TestYearlyByNWeekDayLarge(t *testing.T) {
 }
 
 func TestYearlyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -380,6 +399,7 @@ func TestYearlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -395,6 +415,7 @@ func TestYearlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndNWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	// This is interesting because the TH.Nth(-3) ends up before
 	// the TU.Nth(3).
 	r, _ := NewRRule(ROption{Freq: Yearly,
@@ -412,6 +433,7 @@ func TestYearlyByMonthAndNWeekDayLarge(t *testing.T) {
 }
 
 func TestYearlyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -427,6 +449,7 @@ func TestYearlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -443,6 +466,7 @@ func TestYearlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -458,6 +482,7 @@ func TestYearlyByYearDay(t *testing.T) {
 }
 
 func TestYearlyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -473,6 +498,7 @@ func TestYearlyByYearDayNeg(t *testing.T) {
 }
 
 func TestYearlyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -489,6 +515,7 @@ func TestYearlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -505,6 +532,7 @@ func TestYearlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestYearlyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byweekno: []int{20},
@@ -519,6 +547,7 @@ func TestYearlyByWeekNo(t *testing.T) {
 }
 
 func TestYearlyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
 	r, _ := NewRRule(ROption{Freq: Yearly,
@@ -536,6 +565,7 @@ func TestYearlyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
 	r, _ := NewRRule(ROption{Freq: Yearly,
@@ -553,6 +583,7 @@ func TestYearlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestYearlyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -568,6 +599,7 @@ func TestYearlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestYearlyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byeaster: []int{0},
@@ -582,6 +614,7 @@ func TestYearlyByEaster(t *testing.T) {
 }
 
 func TestYearlyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byeaster: []int{1},
@@ -596,6 +629,7 @@ func TestYearlyByEasterPos(t *testing.T) {
 }
 
 func TestYearlyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -610,6 +644,7 @@ func TestYearlyByEasterNeg(t *testing.T) {
 }
 
 func TestYearlyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -625,6 +660,7 @@ func TestYearlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestYearlyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -639,6 +675,7 @@ func TestYearlyByHour(t *testing.T) {
 }
 
 func TestYearlyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -653,6 +690,7 @@ func TestYearlyByMinute(t *testing.T) {
 }
 
 func TestYearlyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -667,6 +705,7 @@ func TestYearlyBySecond(t *testing.T) {
 }
 
 func TestYearlyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -682,6 +721,7 @@ func TestYearlyByHourAndMinute(t *testing.T) {
 }
 
 func TestYearlyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -697,6 +737,7 @@ func TestYearlyByHourAndSecond(t *testing.T) {
 }
 
 func TestYearlyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -712,6 +753,7 @@ func TestYearlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestYearlyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -728,6 +770,7 @@ func TestYearlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestYearlyBySetPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonthday: []int{15},
@@ -744,6 +787,7 @@ func TestYearlyBySetPos(t *testing.T) {
 }
 
 func TestMonthly(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -757,6 +801,7 @@ func TestMonthly(t *testing.T) {
 }
 
 func TestMonthlyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Interval: 2,
@@ -771,6 +816,7 @@ func TestMonthlyInterval(t *testing.T) {
 }
 
 func TestMonthlyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Interval: 18,
@@ -785,6 +831,7 @@ func TestMonthlyIntervalLarge(t *testing.T) {
 }
 
 func TestMonthlyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -799,6 +846,7 @@ func TestMonthlyByMonth(t *testing.T) {
 }
 
 func TestMonthlyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -813,6 +861,7 @@ func TestMonthlyByMonthDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -828,6 +877,7 @@ func TestMonthlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestMonthlyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -842,6 +892,7 @@ func TestMonthlyByWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -856,6 +907,7 @@ func TestMonthlyByNWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByNWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(3), Thursday.Nth(-3)},
@@ -870,6 +922,7 @@ func TestMonthlyByNWeekDayLarge(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -885,6 +938,7 @@ func TestMonthlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -900,6 +954,7 @@ func TestMonthlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndNWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -915,6 +970,7 @@ func TestMonthlyByMonthAndNWeekDayLarge(t *testing.T) {
 }
 
 func TestMonthlyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -930,6 +986,7 @@ func TestMonthlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -946,6 +1003,7 @@ func TestMonthlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -961,6 +1019,7 @@ func TestMonthlyByYearDay(t *testing.T) {
 }
 
 func TestMonthlyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -976,6 +1035,7 @@ func TestMonthlyByYearDayNeg(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -992,6 +1052,7 @@ func TestMonthlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -1008,6 +1069,7 @@ func TestMonthlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestMonthlyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byweekno: []int{20},
@@ -1022,6 +1084,7 @@ func TestMonthlyByWeekNo(t *testing.T) {
 }
 
 func TestMonthlyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
 	r, _ := NewRRule(ROption{Freq: Monthly,
@@ -1039,6 +1102,7 @@ func TestMonthlyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
 	r, _ := NewRRule(ROption{Freq: Monthly,
@@ -1056,6 +1120,7 @@ func TestMonthlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestMonthlyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -1071,6 +1136,7 @@ func TestMonthlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestMonthlyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -1086,6 +1152,7 @@ func TestMonthlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestMonthlyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byeaster: []int{0},
@@ -1100,6 +1167,7 @@ func TestMonthlyByEaster(t *testing.T) {
 }
 
 func TestMonthlyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byeaster: []int{1},
@@ -1114,6 +1182,7 @@ func TestMonthlyByEasterPos(t *testing.T) {
 }
 
 func TestMonthlyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -1128,6 +1197,7 @@ func TestMonthlyByEasterNeg(t *testing.T) {
 }
 
 func TestMonthlyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -1142,6 +1212,7 @@ func TestMonthlyByHour(t *testing.T) {
 }
 
 func TestMonthlyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -1156,6 +1227,7 @@ func TestMonthlyByMinute(t *testing.T) {
 }
 
 func TestMonthlyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -1170,6 +1242,7 @@ func TestMonthlyBySecond(t *testing.T) {
 }
 
 func TestMonthlyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -1185,6 +1258,7 @@ func TestMonthlyByHourAndMinute(t *testing.T) {
 }
 
 func TestMonthlyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -1200,6 +1274,7 @@ func TestMonthlyByHourAndSecond(t *testing.T) {
 }
 
 func TestMonthlyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -1215,6 +1290,7 @@ func TestMonthlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestMonthlyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -1231,6 +1307,7 @@ func TestMonthlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestMonthlyBySetPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{13, 17},
@@ -1247,6 +1324,7 @@ func TestMonthlyBySetPos(t *testing.T) {
 }
 
 func TestWeekly(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1260,6 +1338,7 @@ func TestWeekly(t *testing.T) {
 }
 
 func TestWeeklyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Interval: 2,
@@ -1274,6 +1353,7 @@ func TestWeeklyInterval(t *testing.T) {
 }
 
 func TestWeeklyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Interval: 20,
@@ -1288,6 +1368,7 @@ func TestWeeklyIntervalLarge(t *testing.T) {
 }
 
 func TestWeeklyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -1302,6 +1383,7 @@ func TestWeeklyByMonth(t *testing.T) {
 }
 
 func TestWeeklyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -1316,6 +1398,7 @@ func TestWeeklyByMonthDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -1331,6 +1414,7 @@ func TestWeeklyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestWeeklyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -1345,6 +1429,7 @@ func TestWeeklyByWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -1359,6 +1444,7 @@ func TestWeeklyByNWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	// This test is interesting, because it crosses the year
 	// boundary in a weekly period to find day '1' as a
 	// valid recurrence.
@@ -1377,6 +1463,7 @@ func TestWeeklyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -1392,6 +1479,7 @@ func TestWeeklyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -1407,6 +1495,7 @@ func TestWeeklyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -1423,6 +1512,7 @@ func TestWeeklyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -1438,6 +1528,7 @@ func TestWeeklyByYearDay(t *testing.T) {
 }
 
 func TestWeeklyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -1453,6 +1544,7 @@ func TestWeeklyByYearDayNeg(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Bymonth:   []int{1, 7},
@@ -1469,6 +1561,7 @@ func TestWeeklyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Bymonth:   []int{1, 7},
@@ -1485,6 +1578,7 @@ func TestWeeklyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestWeeklyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byweekno: []int{20},
@@ -1499,6 +1593,7 @@ func TestWeeklyByWeekNo(t *testing.T) {
 }
 
 func TestWeeklyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
 	r, _ := NewRRule(ROption{Freq: Weekly,
@@ -1516,6 +1611,7 @@ func TestWeeklyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
 	r, _ := NewRRule(ROption{Freq: Weekly,
@@ -1533,6 +1629,7 @@ func TestWeeklyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestWeeklyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -1548,6 +1645,7 @@ func TestWeeklyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestWeeklyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -1563,6 +1661,7 @@ func TestWeeklyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestWeeklyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byeaster: []int{0},
@@ -1577,6 +1676,7 @@ func TestWeeklyByEaster(t *testing.T) {
 }
 
 func TestWeeklyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byeaster: []int{1},
@@ -1591,6 +1691,7 @@ func TestWeeklyByEasterPos(t *testing.T) {
 }
 
 func TestWeeklyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -1605,6 +1706,7 @@ func TestWeeklyByEasterNeg(t *testing.T) {
 }
 
 func TestWeeklyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -1619,6 +1721,7 @@ func TestWeeklyByHour(t *testing.T) {
 }
 
 func TestWeeklyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -1633,6 +1736,7 @@ func TestWeeklyByMinute(t *testing.T) {
 }
 
 func TestWeeklyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -1647,6 +1751,7 @@ func TestWeeklyBySecond(t *testing.T) {
 }
 
 func TestWeeklyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -1662,6 +1767,7 @@ func TestWeeklyByHourAndMinute(t *testing.T) {
 }
 
 func TestWeeklyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -1677,6 +1783,7 @@ func TestWeeklyByHourAndSecond(t *testing.T) {
 }
 
 func TestWeeklyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -1692,6 +1799,7 @@ func TestWeeklyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestWeeklyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -1708,6 +1816,7 @@ func TestWeeklyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestWeeklyBySetPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -1724,6 +1833,7 @@ func TestWeeklyBySetPos(t *testing.T) {
 }
 
 func TestDaily(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1737,6 +1847,7 @@ func TestDaily(t *testing.T) {
 }
 
 func TestDailyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Interval: 2,
@@ -1751,6 +1862,7 @@ func TestDailyInterval(t *testing.T) {
 }
 
 func TestDailyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Interval: 92,
@@ -1765,6 +1877,7 @@ func TestDailyIntervalLarge(t *testing.T) {
 }
 
 func TestDailyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -1779,6 +1892,7 @@ func TestDailyByMonth(t *testing.T) {
 }
 
 func TestDailyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -1793,6 +1907,7 @@ func TestDailyByMonthDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -1808,6 +1923,7 @@ func TestDailyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestDailyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -1822,6 +1938,7 @@ func TestDailyByWeekDay(t *testing.T) {
 }
 
 func TestDailyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -1836,6 +1953,7 @@ func TestDailyByNWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -1851,6 +1969,7 @@ func TestDailyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -1866,6 +1985,7 @@ func TestDailyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -1881,6 +2001,7 @@ func TestDailyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -1897,6 +2018,7 @@ func TestDailyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -1912,6 +2034,7 @@ func TestDailyByYearDay(t *testing.T) {
 }
 
 func TestDailyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -1927,6 +2050,7 @@ func TestDailyByYearDayNeg(t *testing.T) {
 }
 
 func TestDailyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Bymonth:   []int{1, 7},
@@ -1943,6 +2067,7 @@ func TestDailyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Bymonth:   []int{1, 7},
@@ -1959,6 +2084,7 @@ func TestDailyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestDailyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byweekno: []int{20},
@@ -1973,6 +2099,7 @@ func TestDailyByWeekNo(t *testing.T) {
 }
 
 func TestDailyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
 	r, _ := NewRRule(ROption{Freq: Daily,
@@ -1990,6 +2117,7 @@ func TestDailyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
 	r, _ := NewRRule(ROption{Freq: Daily,
@@ -2007,6 +2135,7 @@ func TestDailyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestDailyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -2022,6 +2151,7 @@ func TestDailyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestDailyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -2037,6 +2167,7 @@ func TestDailyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestDailyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byeaster: []int{0},
@@ -2051,6 +2182,7 @@ func TestDailyByEaster(t *testing.T) {
 }
 
 func TestDailyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byeaster: []int{1},
@@ -2065,6 +2197,7 @@ func TestDailyByEasterPos(t *testing.T) {
 }
 
 func TestDailyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -2079,6 +2212,7 @@ func TestDailyByEasterNeg(t *testing.T) {
 }
 
 func TestDailyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -2093,6 +2227,7 @@ func TestDailyByHour(t *testing.T) {
 }
 
 func TestDailyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -2107,6 +2242,7 @@ func TestDailyByMinute(t *testing.T) {
 }
 
 func TestDailyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -2121,6 +2257,7 @@ func TestDailyBySecond(t *testing.T) {
 }
 
 func TestDailyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2136,6 +2273,7 @@ func TestDailyByHourAndMinute(t *testing.T) {
 }
 
 func TestDailyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2151,6 +2289,7 @@ func TestDailyByHourAndSecond(t *testing.T) {
 }
 
 func TestDailyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -2166,6 +2305,7 @@ func TestDailyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestDailyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2182,6 +2322,7 @@ func TestDailyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestDailyBySetPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2198,6 +2339,7 @@ func TestDailyBySetPos(t *testing.T) {
 }
 
 func TestHourly(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2211,6 +2353,7 @@ func TestHourly(t *testing.T) {
 }
 
 func TestHourlyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Interval: 2,
@@ -2225,6 +2368,7 @@ func TestHourlyInterval(t *testing.T) {
 }
 
 func TestHourlyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Interval: 769,
@@ -2239,6 +2383,7 @@ func TestHourlyIntervalLarge(t *testing.T) {
 }
 
 func TestHourlyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -2253,6 +2398,7 @@ func TestHourlyByMonth(t *testing.T) {
 }
 
 func TestHourlyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -2267,6 +2413,7 @@ func TestHourlyByMonthDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -2282,6 +2429,7 @@ func TestHourlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestHourlyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -2296,6 +2444,7 @@ func TestHourlyByWeekDay(t *testing.T) {
 }
 
 func TestHourlyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -2310,6 +2459,7 @@ func TestHourlyByNWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -2325,6 +2475,7 @@ func TestHourlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -2340,6 +2491,7 @@ func TestHourlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -2355,6 +2507,7 @@ func TestHourlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -2371,6 +2524,7 @@ func TestHourlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -2386,6 +2540,7 @@ func TestHourlyByYearDay(t *testing.T) {
 }
 
 func TestHourlyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -2401,6 +2556,7 @@ func TestHourlyByYearDayNeg(t *testing.T) {
 }
 
 func TestHourlyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -2417,6 +2573,7 @@ func TestHourlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -2433,6 +2590,7 @@ func TestHourlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestHourlyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byweekno: []int{20},
@@ -2447,6 +2605,7 @@ func TestHourlyByWeekNo(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{1},
@@ -2462,6 +2621,7 @@ func TestHourlyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{52},
@@ -2477,6 +2637,7 @@ func TestHourlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -2492,6 +2653,7 @@ func TestHourlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -2507,6 +2669,7 @@ func TestHourlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestHourlyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byeaster: []int{0},
@@ -2521,6 +2684,7 @@ func TestHourlyByEaster(t *testing.T) {
 }
 
 func TestHourlyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byeaster: []int{1},
@@ -2535,6 +2699,7 @@ func TestHourlyByEasterPos(t *testing.T) {
 }
 
 func TestHourlyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -2549,6 +2714,7 @@ func TestHourlyByEasterNeg(t *testing.T) {
 }
 
 func TestHourlyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -2563,6 +2729,7 @@ func TestHourlyByHour(t *testing.T) {
 }
 
 func TestHourlyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -2577,6 +2744,7 @@ func TestHourlyByMinute(t *testing.T) {
 }
 
 func TestHourlyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -2591,6 +2759,7 @@ func TestHourlyBySecond(t *testing.T) {
 }
 
 func TestHourlyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2606,6 +2775,7 @@ func TestHourlyByHourAndMinute(t *testing.T) {
 }
 
 func TestHourlyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2621,6 +2791,7 @@ func TestHourlyByHourAndSecond(t *testing.T) {
 }
 
 func TestHourlyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -2636,6 +2807,7 @@ func TestHourlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestHourlyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -2652,6 +2824,7 @@ func TestHourlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestHourlyBySetPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byminute: []int{15, 45},
@@ -2668,6 +2841,7 @@ func TestHourlyBySetPos(t *testing.T) {
 }
 
 func TestMinutely(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2681,6 +2855,7 @@ func TestMinutely(t *testing.T) {
 }
 
 func TestMinutelyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Interval: 2,
@@ -2695,6 +2870,7 @@ func TestMinutelyInterval(t *testing.T) {
 }
 
 func TestMinutelyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Interval: 1501,
@@ -2709,6 +2885,7 @@ func TestMinutelyIntervalLarge(t *testing.T) {
 }
 
 func TestMinutelyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -2723,6 +2900,7 @@ func TestMinutelyByMonth(t *testing.T) {
 }
 
 func TestMinutelyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -2737,6 +2915,7 @@ func TestMinutelyByMonthDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -2752,6 +2931,7 @@ func TestMinutelyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestMinutelyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -2766,6 +2946,7 @@ func TestMinutelyByWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -2780,6 +2961,7 @@ func TestMinutelyByNWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -2795,6 +2977,7 @@ func TestMinutelyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -2810,6 +2993,7 @@ func TestMinutelyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -2825,6 +3009,7 @@ func TestMinutelyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -2841,6 +3026,7 @@ func TestMinutelyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -2856,6 +3042,7 @@ func TestMinutelyByYearDay(t *testing.T) {
 }
 
 func TestMinutelyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -2871,6 +3058,7 @@ func TestMinutelyByYearDayNeg(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -2887,6 +3075,7 @@ func TestMinutelyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -2903,6 +3092,7 @@ func TestMinutelyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestMinutelyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byweekno: []int{20},
@@ -2917,6 +3107,7 @@ func TestMinutelyByWeekNo(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{1},
@@ -2932,6 +3123,7 @@ func TestMinutelyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{52},
@@ -2947,6 +3139,7 @@ func TestMinutelyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -2962,6 +3155,7 @@ func TestMinutelyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -2977,6 +3171,7 @@ func TestMinutelyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestMinutelyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byeaster: []int{0},
@@ -2991,6 +3186,7 @@ func TestMinutelyByEaster(t *testing.T) {
 }
 
 func TestMinutelyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byeaster: []int{1},
@@ -3005,6 +3201,7 @@ func TestMinutelyByEasterPos(t *testing.T) {
 }
 
 func TestMinutelyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -3019,6 +3216,7 @@ func TestMinutelyByEasterNeg(t *testing.T) {
 }
 
 func TestMinutelyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -3033,6 +3231,7 @@ func TestMinutelyByHour(t *testing.T) {
 }
 
 func TestMinutelyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -3047,6 +3246,7 @@ func TestMinutelyByMinute(t *testing.T) {
 }
 
 func TestMinutelyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -3061,6 +3261,7 @@ func TestMinutelyBySecond(t *testing.T) {
 }
 
 func TestMinutelyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -3076,6 +3277,7 @@ func TestMinutelyByHourAndMinute(t *testing.T) {
 }
 
 func TestMinutelyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -3091,6 +3293,7 @@ func TestMinutelyByHourAndSecond(t *testing.T) {
 }
 
 func TestMinutelyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -3106,6 +3309,7 @@ func TestMinutelyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestMinutelyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -3122,6 +3326,7 @@ func TestMinutelyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestMinutelyBySetPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Bysecond: []int{15, 30, 45},
@@ -3137,6 +3342,7 @@ func TestMinutelyBySetPos(t *testing.T) {
 }
 
 func TestSecondly(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3150,6 +3356,7 @@ func TestSecondly(t *testing.T) {
 }
 
 func TestSecondlyInterval(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Interval: 2,
@@ -3164,6 +3371,7 @@ func TestSecondlyInterval(t *testing.T) {
 }
 
 func TestSecondlyIntervalLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Interval: 90061,
@@ -3178,6 +3386,7 @@ func TestSecondlyIntervalLarge(t *testing.T) {
 }
 
 func TestSecondlyByMonth(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:   3,
 		Bymonth: []int{1, 3},
@@ -3192,6 +3401,7 @@ func TestSecondlyByMonth(t *testing.T) {
 }
 
 func TestSecondlyByMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -3206,6 +3416,7 @@ func TestSecondlyByMonthDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndMonthDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -3221,6 +3432,7 @@ func TestSecondlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestSecondlyByWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday, Thursday},
@@ -3235,6 +3447,7 @@ func TestSecondlyByWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
@@ -3249,6 +3462,7 @@ func TestSecondlyByNWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -3264,6 +3478,7 @@ func TestSecondlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndNWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
@@ -3279,6 +3494,7 @@ func TestSecondlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
@@ -3294,6 +3510,7 @@ func TestSecondlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
@@ -3310,6 +3527,7 @@ func TestSecondlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
@@ -3325,6 +3543,7 @@ func TestSecondlyByYearDay(t *testing.T) {
 }
 
 func TestSecondlyByYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
@@ -3340,6 +3559,7 @@ func TestSecondlyByYearDayNeg(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndYearDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -3356,6 +3576,7 @@ func TestSecondlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndYearDayNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
@@ -3372,6 +3593,7 @@ func TestSecondlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestSecondlyByWeekNo(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byweekno: []int{20},
@@ -3386,6 +3608,7 @@ func TestSecondlyByWeekNo(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDay(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{1},
@@ -3401,6 +3624,7 @@ func TestSecondlyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDayLarge(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{52},
@@ -3416,6 +3640,7 @@ func TestSecondlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDayLast(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{-1},
@@ -3431,6 +3656,7 @@ func TestSecondlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDay53(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{53},
@@ -3446,6 +3672,7 @@ func TestSecondlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestSecondlyByEaster(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byeaster: []int{0},
@@ -3460,6 +3687,7 @@ func TestSecondlyByEaster(t *testing.T) {
 }
 
 func TestSecondlyByEasterPos(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byeaster: []int{1},
@@ -3474,6 +3702,7 @@ func TestSecondlyByEasterPos(t *testing.T) {
 }
 
 func TestSecondlyByEasterNeg(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byeaster: []int{-1},
@@ -3488,6 +3717,7 @@ func TestSecondlyByEasterNeg(t *testing.T) {
 }
 
 func TestSecondlyByHour(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:   3,
 		Byhour:  []int{6, 18},
@@ -3502,6 +3732,7 @@ func TestSecondlyByHour(t *testing.T) {
 }
 
 func TestSecondlyByMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -3516,6 +3747,7 @@ func TestSecondlyByMinute(t *testing.T) {
 }
 
 func TestSecondlyBySecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Bysecond: []int{6, 18},
@@ -3530,6 +3762,7 @@ func TestSecondlyBySecond(t *testing.T) {
 }
 
 func TestSecondlyByHourAndMinute(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -3545,6 +3778,7 @@ func TestSecondlyByHourAndMinute(t *testing.T) {
 }
 
 func TestSecondlyByHourAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -3560,6 +3794,7 @@ func TestSecondlyByHourAndSecond(t *testing.T) {
 }
 
 func TestSecondlyByMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byminute: []int{6, 18},
@@ -3575,6 +3810,7 @@ func TestSecondlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestSecondlyByHourAndMinuteAndSecond(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byhour:   []int{6, 18},
@@ -3591,6 +3827,7 @@ func TestSecondlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestSecondlyByHourAndMinuteAndSecondBug(t *testing.T) {
+	t.Parallel()
 	// This explores a bug found by Mathieu Bridon.
 	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
@@ -3607,6 +3844,7 @@ func TestSecondlyByHourAndMinuteAndSecondBug(t *testing.T) {
 }
 
 func TestUntilNotMatching(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3621,6 +3859,7 @@ func TestUntilNotMatching(t *testing.T) {
 }
 
 func TestUntilMatching(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3635,6 +3874,7 @@ func TestUntilMatching(t *testing.T) {
 }
 
 func TestUntilSingle(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3647,6 +3887,7 @@ func TestUntilSingle(t *testing.T) {
 }
 
 func TestUntilEmpty(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3659,6 +3900,7 @@ func TestUntilEmpty(t *testing.T) {
 }
 
 func TestUntilWithDate(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3673,6 +3915,7 @@ func TestUntilWithDate(t *testing.T) {
 }
 
 func TestWkStIntervalMO(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Interval:  2,
@@ -3689,6 +3932,7 @@ func TestWkStIntervalMO(t *testing.T) {
 }
 
 func TestWkStIntervalSU(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Interval:  2,
@@ -3705,6 +3949,7 @@ func TestWkStIntervalSU(t *testing.T) {
 }
 
 func TestDTStart(t *testing.T) {
+	t.Parallel()
 	dt := time.Now().UTC().Truncate(time.Second)
 	r, _ := NewRRule(ROption{Freq: Yearly, Count: 3})
 	want := []time.Time{dt, dt.AddDate(1, 0, 0), dt.AddDate(2, 0, 0)}
@@ -3723,6 +3968,7 @@ func TestDTStart(t *testing.T) {
 }
 
 func TestDTStartIsDate(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 0, 0, 0, 0, time.UTC)})
@@ -3736,6 +3982,7 @@ func TestDTStartIsDate(t *testing.T) {
 }
 
 func TestDTStartWithMicroseconds(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 500000000, time.UTC)})
@@ -3749,6 +3996,7 @@ func TestDTStartWithMicroseconds(t *testing.T) {
 }
 
 func TestUntil(t *testing.T) {
+	t.Parallel()
 	r1, _ := NewRRule(ROption{Freq: Daily,
 		Dtstart: time.Date(1997, 9, 2, 0, 0, 0, 0, time.UTC)})
 	r1.Until(time.Date(1998, 9, 2, 0, 0, 0, 0, time.UTC))
@@ -3773,6 +4021,7 @@ func TestUntil(t *testing.T) {
 }
 
 func TestMaxYear(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonth:    []int{2},
@@ -3786,6 +4035,7 @@ func TestMaxYear(t *testing.T) {
 }
 
 func TestBefore(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3797,6 +4047,7 @@ func TestBefore(t *testing.T) {
 }
 
 func TestBeforeInc(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3808,6 +4059,7 @@ func TestBeforeInc(t *testing.T) {
 }
 
 func TestAfter(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3820,6 +4072,7 @@ func TestAfter(t *testing.T) {
 }
 
 func TestAfterInc(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3831,6 +4084,7 @@ func TestAfterInc(t *testing.T) {
 }
 
 func TestBetween(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3844,6 +4098,7 @@ func TestBetween(t *testing.T) {
 }
 
 func TestBetweenInc(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3859,6 +4114,7 @@ func TestBetweenInc(t *testing.T) {
 }
 
 func TestAllWithDefaultUtil(t *testing.T) {
+	t.Parallel()
 	r, _ := NewRRule(ROption{Freq: Yearly,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 
@@ -3874,6 +4130,7 @@ func TestAllWithDefaultUtil(t *testing.T) {
 }
 
 func TestWeekdayGetters(t *testing.T) {
+	t.Parallel()
 	wd := Weekday{n: 2, weekday: 0}
 	if wd.N() != 2 {
 		t.Errorf("Ord week getter is wrong")
@@ -3884,6 +4141,7 @@ func TestWeekdayGetters(t *testing.T) {
 }
 
 func TestRuleChangeDTStartTimezoneRespected(t *testing.T) {
+	t.Parallel()
 	/*
 		https://golang.org/pkg/time/#LoadLocation
 

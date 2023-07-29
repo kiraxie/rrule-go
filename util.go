@@ -3,7 +3,6 @@
 package rrule
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"strconv"
@@ -107,7 +106,7 @@ func pySubscript(slice []int, index int) (int, error) {
 		index += len(slice)
 	}
 	if index < 0 || index >= len(slice) {
-		return 0, errors.New("index error")
+		return 0, ErrIndexOutOfBounds
 	}
 	return slice[index], nil
 }

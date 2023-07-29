@@ -3,7 +3,6 @@
 package rrule
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -136,7 +135,7 @@ func StrToROptionInLocation(rfcString string, loc *time.Location) (*ROption, err
 		dtstartStr = strs[0]
 		rruleStr = strs[1]
 	default:
-		return nil, errors.New("invalid RRULE string")
+		return nil, ErrInvalidRRuleFormat
 	}
 
 	result := ROption{}
@@ -145,15 +144,15 @@ func StrToROptionInLocation(rfcString string, loc *time.Location) (*ROption, err
 	if dtstartStr != "" {
 		firstName, err := processRRuleName(dtstartStr)
 		if err != nil {
-			return nil, fmt.Errorf("expect DTSTART but: %s", err)
+			return nil, fmt.Errorf("%w: expect DTSTART but %w", ErrInvalidRRuleFormat, err)
 		}
 		if firstName != "DTSTART" {
-			return nil, fmt.Errorf("expect DTSTART but: %s", firstName)
+			return nil, fmt.Errorf("%w: expect DTSTART but %s", ErrInvalidRRuleFormat, firstName)
 		}
 
 		result.Dtstart, err = StrToDtStart(dtstartStr[len(firstName)+1:], loc)
 		if err != nil {
-			return nil, fmt.Errorf("StrToDtStart failed: %s", err)
+			return nil, fmt.Errorf("StrToDtStart failed: %w", err)
 		}
 	}
 
@@ -161,11 +160,11 @@ func StrToROptionInLocation(rfcString string, loc *time.Location) (*ROption, err
 	for _, attr := range strings.Split(rruleStr, ";") {
 		keyValue := strings.Split(attr, "=")
 		if len(keyValue) != 2 {
-			return nil, errors.New("wrong format")
+			return nil, ErrInvalidRRuleFormat
 		}
 		key, value := keyValue[0], keyValue[1]
 		if len(value) == 0 {
-			return nil, errors.New(key + " option has no value")
+			return nil, fmt.Errorf("%w: empty value for %s", ErrInvalidRRuleFormat, key)
 		}
 		var e error
 		switch key {
@@ -203,7 +202,7 @@ func StrToROptionInLocation(rfcString string, loc *time.Location) (*ROption, err
 		case "BYEASTER":
 			result.Byeaster, e = strToInts(value)
 		default:
-			return nil, errors.New("unknown RRULE property: " + key)
+			return nil, fmt.Errorf("%w: unknown key %s", ErrInvalidRRuleFormat, key)
 		}
 		if e != nil {
 			return nil, e
@@ -214,7 +213,7 @@ func StrToROptionInLocation(rfcString string, loc *time.Location) (*ROption, err
 		// parameter. We'll just confirm it exists because we do not
 		// have a meaningful default nor a way to confirm if we parsed
 		// a value from the options this returns.
-		return nil, errors.New("RRULE property FREQ is required")
+		return nil, fmt.Errorf("%w: FREQ is mandatory", ErrInvalidRRuleFormat)
 	}
 	return &result, nil
 }
@@ -241,7 +240,7 @@ func StrToRRule(rfcString string) (*RRule, error) {
 func StrToRRuleSet(s string) (*Set, error) {
 	s = strings.TrimSpace(s)
 	if s == "" {
-		return nil, errors.New("empty string")
+		return nil, fmt.Errorf("%w: empty string", ErrInvalidRRuleFormat)
 	}
 	ss := strings.Split(s, "\n")
 	return StrSliceToRRuleSet(ss)
@@ -271,7 +270,7 @@ func StrSliceToRRuleSetInLoc(ss []string, defaultLoc *time.Location) (*Set, erro
 	if firstName == "DTSTART" {
 		dt, err := StrToDtStart(ss[0][len(firstName)+1:], defaultLoc)
 		if err != nil {
-			return nil, fmt.Errorf("StrToDtStart failed: %v", err)
+			return nil, fmt.Errorf("StrToDtStart failed: %w", err)
 		}
 		// default location should be taken from DTSTART property to correctly
 		// parse local times met in RDATE,EXDATE and other rules
@@ -292,18 +291,18 @@ func StrSliceToRRuleSetInLoc(ss []string, defaultLoc *time.Location) (*Set, erro
 		case "RRULE":
 			rOpt, err := StrToROptionInLocation(rule, defaultLoc)
 			if err != nil {
-				return nil, fmt.Errorf("StrToROption failed: %v", err)
+				return nil, fmt.Errorf("StrToROption failed: %w", err)
 			}
 			r, err := NewRRule(*rOpt)
 			if err != nil {
-				return nil, fmt.Errorf("NewRRule failed: %v", r)
+				return nil, err
 			}
 
 			set.RRule(r)
 		case "RDATE", "EXDATE":
 			ts, err := StrToDatesInLoc(rule, defaultLoc)
 			if err != nil {
-				return nil, fmt.Errorf("strToDates failed: %v", err)
+				return nil, fmt.Errorf("strToDates failed: %w", err)
 			}
 			for _, t := range ts {
 				if name == "RDATE" {
@@ -343,7 +342,7 @@ func StrToDates(str string) (ts []time.Time, err error) {
 func StrToDatesInLoc(str string, defaultLoc *time.Location) (ts []time.Time, err error) {
 	tmp := strings.Split(str, ":")
 	if len(tmp) > 2 {
-		return nil, fmt.Errorf("bad format")
+		return nil, ErrBadFormat
 	}
 	loc := defaultLoc
 	if len(tmp) == 2 {
@@ -355,7 +354,7 @@ func StrToDatesInLoc(str string, defaultLoc *time.Location) (ts []time.Time, err
 				err = fmt.Errorf("unsupported: %v", param)
 			}
 			if err != nil {
-				return nil, fmt.Errorf("bad dates param: %s", err.Error())
+				return nil, fmt.Errorf("bad dates param: %w", err)
 			}
 		}
 		tmp = tmp[1:]
@@ -363,7 +362,7 @@ func StrToDatesInLoc(str string, defaultLoc *time.Location) (ts []time.Time, err
 	for _, datestr := range strings.Split(tmp[0], ",") {
 		t, err := strToTimeInLoc(datestr, loc)
 		if err != nil {
-			return nil, fmt.Errorf("strToTime failed: %v", err)
+			return nil, fmt.Errorf("strToTime failed: %w", err)
 		}
 		ts = append(ts, t)
 	}
@@ -374,17 +373,17 @@ func StrToDatesInLoc(str string, defaultLoc *time.Location) (ts []time.Time, err
 func processRRuleName(line string) (string, error) {
 	line = strings.ToUpper(strings.TrimSpace(line))
 	if line == "" {
-		return "", fmt.Errorf("bad format %v", line)
+		return "", fmt.Errorf("%w: %s", ErrBadFormat, line)
 	}
 
 	nameLen := strings.IndexAny(line, ";:")
 	if nameLen <= 0 {
-		return "", fmt.Errorf("bad format %v", line)
+		return "", fmt.Errorf("%w: %s", ErrBadFormat, line)
 	}
 
 	name := line[:nameLen]
 	if strings.IndexAny(name, "=") > 0 {
-		return "", fmt.Errorf("bad format %v", line)
+		return "", fmt.Errorf("%w: %s", ErrBadFormat, line)
 	}
 
 	return name, nil
@@ -395,7 +394,7 @@ func processRRuleName(line string) (string, error) {
 func StrToDtStart(str string, defaultLoc *time.Location) (time.Time, error) {
 	tmp := strings.Split(str, ":")
 	if len(tmp) > 2 || len(tmp) == 0 {
-		return time.Time{}, fmt.Errorf("bad format")
+		return time.Time{}, ErrBadFormat
 	}
 
 	if len(tmp) == 2 {
@@ -412,7 +411,7 @@ func StrToDtStart(str string, defaultLoc *time.Location) (time.Time, error) {
 
 func parseTZID(s string) (*time.Location, error) {
 	if !strings.HasPrefix(s, "TZID=") || len(s) == len("TZID=") {
-		return nil, fmt.Errorf("bad TZID parameter format")
+		return nil, fmt.Errorf("bad tzid: %s", s)
 	}
 	return time.LoadLocation(s[len("TZID="):])
 }

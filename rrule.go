@@ -3,41 +3,10 @@
 package rrule
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"time"
 )
-
-// Every mask is 7 days longer to handle cross-year weekly periods.
-var (
-	M366MASK     []int
-	M365MASK     []int
-	MDAY366MASK  []int
-	MDAY365MASK  []int
-	NMDAY366MASK []int
-	NMDAY365MASK []int
-	WDAYMASK     []int
-	M366RANGE    = []int{0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}
-	M365RANGE    = []int{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365}
-)
-
-func init() {
-	M366MASK = concat(repeat(1, 31), repeat(2, 29), repeat(3, 31),
-		repeat(4, 30), repeat(5, 31), repeat(6, 30), repeat(7, 31),
-		repeat(8, 31), repeat(9, 30), repeat(10, 31), repeat(11, 30),
-		repeat(12, 31), repeat(1, 7))
-	M365MASK = concat(M366MASK[:59], M366MASK[60:])
-	M29, M30, M31 := rang(1, 30), rang(1, 31), rang(1, 32)
-	MDAY366MASK = concat(M31, M29, M31, M30, M31, M30, M31, M31, M30, M31, M30, M31, M31[:7])
-	MDAY365MASK = concat(MDAY366MASK[:59], MDAY366MASK[60:])
-	M29, M30, M31 = rang(-29, 0), rang(-30, 0), rang(-31, 0)
-	NMDAY366MASK = concat(M31, M29, M31, M30, M31, M30, M31, M31, M30, M31, M30, M31, M31[:7])
-	NMDAY365MASK = concat(NMDAY366MASK[:31], NMDAY366MASK[32:])
-	for i := 0; i < 55; i++ {
-		WDAYMASK = append(WDAYMASK, []int{0, 1, 2, 3, 4, 5, 6}...)
-	}
-}
 
 // ROption offers options to construct a RRule instance.
 // For performance, it is strongly recommended providing explicit ROption.Dtstart, which defaults to `time.Now().UTC().Truncate(time.Second)`.
@@ -77,7 +46,7 @@ type RRule struct {
 	byyearday               []int
 	byweekno                []int
 	byweekday               []int
-	bynweekday              []Weekday
+	bydays                  []Weekday
 	byhour                  []int
 	byminute                []int
 	bysecond                []int
@@ -162,7 +131,7 @@ func buildRRule(arg ROption) RRule {
 		if wday.n == 0 || r.freq > Monthly {
 			r.byweekday = append(r.byweekday, wday.weekday)
 		} else {
-			r.bynweekday = append(r.bynweekday, wday)
+			r.bydays = append(r.bydays, wday)
 		}
 	}
 	if len(arg.Byhour) == 0 {
@@ -233,7 +202,7 @@ func validateBounds(arg ROption) error {
 			if plusMinus {
 				plusMinusBounds = fmt.Sprintf(" or %d and %d", -bounds[0], -bounds[1])
 			}
-			return fmt.Errorf("%s must be between %d and %d%s", param, bounds[0], bounds[1], plusMinusBounds)
+			return fmt.Errorf("%w: %s must be between %d and %d%s", ErrInvalidateBound, param, bounds[0], bounds[1], plusMinusBounds)
 		}
 		return nil
 	}
@@ -250,12 +219,12 @@ func validateBounds(arg ROption) error {
 	// of the month/year.
 	for _, w := range arg.Byweekday {
 		if w.n > 53 || w.n < -53 {
-			return errors.New("byday must be between 1 and 53 or -1 and -53")
+			return fmt.Errorf("%w: byday must be between 1 and 53 or -1 and -53", ErrInvalidateBound)
 		}
 	}
 
 	if arg.Interval < 0 {
-		return errors.New("interval must be greater than 0")
+		return fmt.Errorf("%w: interval must be greater than 0", ErrInvalidateBound)
 	}
 
 	return nil
@@ -288,17 +257,17 @@ func (info *iterInfo) rebuild(year int, month time.Month) {
 			year, time.January, 1, 0, 0, 0, 0,
 			info.rrule.dtstart.Location())
 		info.yearweekday = toPyWeekday(info.firstyday.Weekday())
-		info.wdaymask = WDAYMASK[info.yearweekday:]
+		info.wdaymask = maskDay[info.yearweekday:]
 		if info.yearlen == 365 {
-			info.mmask = M365MASK
-			info.mdaymask = MDAY365MASK
-			info.nmdaymask = NMDAY365MASK
-			info.mrange = M365RANGE
+			info.mmask = mask365
+			info.mdaymask = mask365day
+			info.nmdaymask = mask365monthDay
+			info.mrange = range365
 		} else {
-			info.mmask = M366MASK
-			info.mdaymask = MDAY366MASK
-			info.nmdaymask = NMDAY366MASK
-			info.mrange = M366RANGE
+			info.mmask = mask366
+			info.mdaymask = mask366day
+			info.nmdaymask = mask366monthDay
+			info.mrange = range366
 		}
 		if len(info.rrule.byweekno) == 0 {
 			info.wnomask = nil
@@ -391,7 +360,7 @@ func (info *iterInfo) rebuild(year int, month time.Month) {
 			}
 		}
 	}
-	if len(info.rrule.bynweekday) != 0 && (month != info.lastmonth || year != info.lastyear) {
+	if len(info.rrule.bydays) != 0 && (month != info.lastmonth || year != info.lastyear) {
 		var ranges [][]int
 		if info.rrule.freq == Yearly {
 			if len(info.rrule.bymonth) != 0 {
@@ -411,7 +380,7 @@ func (info *iterInfo) rebuild(year int, month time.Month) {
 			for _, x := range ranges {
 				first, last := x[0], x[1]
 				last--
-				for _, y := range info.rrule.bynweekday {
+				for _, y := range info.rrule.bydays {
 					wday, n := y.weekday, y.n
 					var i int
 					if n < 0 {

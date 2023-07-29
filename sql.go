@@ -40,8 +40,8 @@ func (t RRule) Value() (driver.Value, error) {
 	} else {
 		s = append(s, "")
 	}
-	if len(t.bynweekday) != 0 {
-		s = append(s, fmt.Sprintf("\"{%s}\"", strings.Join(weekdaySliceToStringSlice(t.bynweekday), ",")))
+	if len(t.bydays) != 0 {
+		s = append(s, fmt.Sprintf("\"{%s}\"", strings.Join(weekdaySliceToStringSlice(t.bydays), ",")))
 	} else {
 		s = append(s, "")
 	}

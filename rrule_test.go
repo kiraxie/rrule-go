@@ -3,6 +3,7 @@
 package rrule
 
 import (
+	"errors"
 	"testing"
 	"time"
 )
@@ -88,132 +89,108 @@ func TestWeeklyMaxYear(t *testing.T) {
 func TestInvalidRRules(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		desc    string
-		rrule   ROption
-		wantErr string
+		desc  string
+		rrule ROption
 	}{
 		{
-			desc:    "Bysecond under",
-			rrule:   ROption{Freq: Yearly, Bysecond: []int{-1}},
-			wantErr: "bysecond must be between 0 and 59",
+			desc:  "Bysecond under",
+			rrule: ROption{Freq: Yearly, Bysecond: []int{-1}},
 		},
 		{
-			desc:    "Bysecond over",
-			rrule:   ROption{Freq: Yearly, Bysecond: []int{60}},
-			wantErr: "bysecond must be between 0 and 59",
+			desc:  "Bysecond over",
+			rrule: ROption{Freq: Yearly, Bysecond: []int{60}},
 		},
 		{
-			desc:    "Byminute under",
-			rrule:   ROption{Freq: Yearly, Byminute: []int{-1}},
-			wantErr: "byminute must be between 0 and 59",
+			desc:  "Byminute under",
+			rrule: ROption{Freq: Yearly, Byminute: []int{-1}},
 		},
 		{
-			desc:    "Byminute over",
-			rrule:   ROption{Freq: Yearly, Byminute: []int{60}},
-			wantErr: "byminute must be between 0 and 59",
+			desc:  "Byminute over",
+			rrule: ROption{Freq: Yearly, Byminute: []int{60}},
 		},
 		{
-			desc:    "Byhour under",
-			rrule:   ROption{Freq: Yearly, Byhour: []int{-1}},
-			wantErr: "byhour must be between 0 and 23",
+			desc:  "Byhour under",
+			rrule: ROption{Freq: Yearly, Byhour: []int{-1}},
 		},
 		{
-			desc:    "Byhour over",
-			rrule:   ROption{Freq: Yearly, Byhour: []int{24}},
-			wantErr: "byhour must be between 0 and 23",
+			desc:  "Byhour over",
+			rrule: ROption{Freq: Yearly, Byhour: []int{24}},
 		},
 		{
-			desc:    "Bymonthday under",
-			rrule:   ROption{Freq: Yearly, Bymonthday: []int{0}},
-			wantErr: "bymonthday must be between 1 and 31 or -1 and -31",
+			desc:  "Bymonthday under",
+			rrule: ROption{Freq: Yearly, Bymonthday: []int{0}},
 		},
 		{
-			desc:    "Bymonthday over",
-			rrule:   ROption{Freq: Yearly, Bymonthday: []int{32}},
-			wantErr: "bymonthday must be between 1 and 31 or -1 and -31",
+			desc:  "Bymonthday over",
+			rrule: ROption{Freq: Yearly, Bymonthday: []int{32}},
 		},
 		{
-			desc:    "Bymonthday under negative",
-			rrule:   ROption{Freq: Yearly, Bymonthday: []int{-32}},
-			wantErr: "bymonthday must be between 1 and 31 or -1 and -31",
+			desc:  "Bymonthday under negative",
+			rrule: ROption{Freq: Yearly, Bymonthday: []int{-32}},
 		},
 		{
-			desc:    "Byyearday under",
-			rrule:   ROption{Freq: Yearly, Byyearday: []int{0}},
-			wantErr: "byyearday must be between 1 and 366 or -1 and -366",
+			desc:  "Byyearday under",
+			rrule: ROption{Freq: Yearly, Byyearday: []int{0}},
 		},
 		{
-			desc:    "Byyearday over",
-			rrule:   ROption{Freq: Yearly, Byyearday: []int{367}},
-			wantErr: "byyearday must be between 1 and 366 or -1 and -366",
+			desc:  "Byyearday over",
+			rrule: ROption{Freq: Yearly, Byyearday: []int{367}},
 		},
 		{
-			desc:    "Byyearday under negative",
-			rrule:   ROption{Freq: Yearly, Byyearday: []int{-367}},
-			wantErr: "byyearday must be between 1 and 366 or -1 and -366",
+			desc:  "Byyearday under negative",
+			rrule: ROption{Freq: Yearly, Byyearday: []int{-367}},
 		},
 		{
-			desc:    "Byweekno under",
-			rrule:   ROption{Freq: Yearly, Byweekno: []int{0}},
-			wantErr: "byweekno must be between 1 and 53 or -1 and -53",
+			desc:  "Byweekno under",
+			rrule: ROption{Freq: Yearly, Byweekno: []int{0}},
 		},
 		{
-			desc:    "Byweekno over",
-			rrule:   ROption{Freq: Yearly, Byweekno: []int{54}},
-			wantErr: "byweekno must be between 1 and 53 or -1 and -53",
+			desc:  "Byweekno over",
+			rrule: ROption{Freq: Yearly, Byweekno: []int{54}},
 		},
 		{
-			desc:    "Byweekno under negative",
-			rrule:   ROption{Freq: Yearly, Byweekno: []int{-54}},
-			wantErr: "byweekno must be between 1 and 53 or -1 and -53",
+			desc:  "Byweekno under negative",
+			rrule: ROption{Freq: Yearly, Byweekno: []int{-54}},
 		},
 		{
-			desc:    "Bymonth under",
-			rrule:   ROption{Freq: Yearly, Bymonth: []int{0}},
-			wantErr: "bymonth must be between 1 and 12",
+			desc:  "Bymonth under",
+			rrule: ROption{Freq: Yearly, Bymonth: []int{0}},
 		},
 		{
-			desc:    "Bymonth over",
-			rrule:   ROption{Freq: Yearly, Bymonth: []int{13}},
-			wantErr: "bymonth must be between 1 and 12",
+			desc:  "Bymonth over",
+			rrule: ROption{Freq: Yearly, Bymonth: []int{13}},
 		},
 		{
-			desc:    "Bysetpos under",
-			rrule:   ROption{Freq: Yearly, Bysetpos: []int{0}},
-			wantErr: "bysetpos must be between 1 and 366 or -1 and -366",
+			desc:  "Bysetpos under",
+			rrule: ROption{Freq: Yearly, Bysetpos: []int{0}},
 		},
 		{
-			desc:    "Bysetpos over",
-			rrule:   ROption{Freq: Yearly, Bysetpos: []int{367}},
-			wantErr: "bysetpos must be between 1 and 366 or -1 and -366",
+			desc:  "Bysetpos over",
+			rrule: ROption{Freq: Yearly, Bysetpos: []int{367}},
 		},
 		{
-			desc:    "Bysetpos under negative",
-			rrule:   ROption{Freq: Yearly, Bysetpos: []int{-367}},
-			wantErr: "bysetpos must be between 1 and 366 or -1 and -366",
+			desc:  "Bysetpos under negative",
+			rrule: ROption{Freq: Yearly, Bysetpos: []int{-367}},
 		},
 		{
-			desc:    "Byday under",
-			rrule:   ROption{Freq: Yearly, Byweekday: []Weekday{{1, -54}}},
-			wantErr: "byday must be between 1 and 53 or -1 and -53",
+			desc:  "Byday under",
+			rrule: ROption{Freq: Yearly, Byweekday: []Weekday{{1, -54}}},
 		},
 		{
-			desc:    "Byday over",
-			rrule:   ROption{Freq: Yearly, Byweekday: []Weekday{{1, 54}}},
-			wantErr: "byday must be between 1 and 53 or -1 and -53",
+			desc:  "Byday over",
+			rrule: ROption{Freq: Yearly, Byweekday: []Weekday{{1, 54}}},
 		},
 		{
-			desc:    "Interval under",
-			rrule:   ROption{Freq: Daily, Interval: -1},
-			wantErr: "interval must be greater than 0",
+			desc:  "Interval under",
+			rrule: ROption{Freq: Daily, Interval: -1},
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
 			_, err := NewRRule(tc.rrule)
-			if err == nil || err.Error() != tc.wantErr {
-				t.Errorf("got %q, want %q", err, tc.wantErr)
+			if err == nil || !errors.Is(err, ErrInvalidateBound) {
+				t.Errorf("got %q, want %s", err, ErrInvalidateBound)
 			}
 		})
 	}

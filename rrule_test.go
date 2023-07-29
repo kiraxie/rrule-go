@@ -20,14 +20,14 @@ func timesEqual(value, want []time.Time) bool {
 }
 
 func TestNoDtstart(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY})
+	r, _ := NewRRule(ROption{Freq: Monthly})
 	if time.Now().Unix()-r.dtstart.Unix() > 1 {
 		t.Errorf(`default Dtstart shold be time.Now(), but got %s`, r.dtstart.Format(time.RFC3339))
 	}
 }
 
 func TestBadBySetPos(t *testing.T) {
-	_, e := NewRRule(ROption{Freq: MONTHLY, Count: 1, Bysetpos: []int{0},
+	_, e := NewRRule(ROption{Freq: Monthly, Count: 1, Bysetpos: []int{0},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	if e == nil {
 		t.Error("get nil, want error")
@@ -35,7 +35,7 @@ func TestBadBySetPos(t *testing.T) {
 }
 
 func TestBadBySetPosMany(t *testing.T) {
-	_, e := NewRRule(ROption{Freq: MONTHLY, Count: 1, Bysetpos: []int{-1, 0, 1},
+	_, e := NewRRule(ROption{Freq: Monthly, Count: 1, Bysetpos: []int{-1, 0, 1},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	if e == nil {
 		t.Error("get nil, want error")
@@ -43,7 +43,7 @@ func TestBadBySetPosMany(t *testing.T) {
 }
 
 func TestByNegativeMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{-1},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -57,7 +57,7 @@ func TestByNegativeMonthDay(t *testing.T) {
 }
 
 func TestMonthlyMaxYear(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY, Interval: 15,
+	r, _ := NewRRule(ROption{Freq: Monthly, Interval: 15,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 	})
 	value := r.All()[1]
@@ -69,7 +69,7 @@ func TestMonthlyMaxYear(t *testing.T) {
 
 func TestWeeklyMaxYear(t *testing.T) {
 	// Purposefully doesn't match anything for code coverage.
-	r, _ := NewRRule(ROption{Freq: WEEKLY, Bymonthday: []int{31},
+	r, _ := NewRRule(ROption{Freq: Weekly, Bymonthday: []int{31},
 		Byyearday: []int{1}, Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 	})
 	value := r.All()
@@ -87,117 +87,117 @@ func TestInvalidRRules(t *testing.T) {
 	}{
 		{
 			desc:    "Bysecond under",
-			rrule:   ROption{Freq: YEARLY, Bysecond: []int{-1}},
+			rrule:   ROption{Freq: Yearly, Bysecond: []int{-1}},
 			wantErr: "bysecond must be between 0 and 59",
 		},
 		{
 			desc:    "Bysecond over",
-			rrule:   ROption{Freq: YEARLY, Bysecond: []int{60}},
+			rrule:   ROption{Freq: Yearly, Bysecond: []int{60}},
 			wantErr: "bysecond must be between 0 and 59",
 		},
 		{
 			desc:    "Byminute under",
-			rrule:   ROption{Freq: YEARLY, Byminute: []int{-1}},
+			rrule:   ROption{Freq: Yearly, Byminute: []int{-1}},
 			wantErr: "byminute must be between 0 and 59",
 		},
 		{
 			desc:    "Byminute over",
-			rrule:   ROption{Freq: YEARLY, Byminute: []int{60}},
+			rrule:   ROption{Freq: Yearly, Byminute: []int{60}},
 			wantErr: "byminute must be between 0 and 59",
 		},
 		{
 			desc:    "Byhour under",
-			rrule:   ROption{Freq: YEARLY, Byhour: []int{-1}},
+			rrule:   ROption{Freq: Yearly, Byhour: []int{-1}},
 			wantErr: "byhour must be between 0 and 23",
 		},
 		{
 			desc:    "Byhour over",
-			rrule:   ROption{Freq: YEARLY, Byhour: []int{24}},
+			rrule:   ROption{Freq: Yearly, Byhour: []int{24}},
 			wantErr: "byhour must be between 0 and 23",
 		},
 		{
 			desc:    "Bymonthday under",
-			rrule:   ROption{Freq: YEARLY, Bymonthday: []int{0}},
+			rrule:   ROption{Freq: Yearly, Bymonthday: []int{0}},
 			wantErr: "bymonthday must be between 1 and 31 or -1 and -31",
 		},
 		{
 			desc:    "Bymonthday over",
-			rrule:   ROption{Freq: YEARLY, Bymonthday: []int{32}},
+			rrule:   ROption{Freq: Yearly, Bymonthday: []int{32}},
 			wantErr: "bymonthday must be between 1 and 31 or -1 and -31",
 		},
 		{
 			desc:    "Bymonthday under negative",
-			rrule:   ROption{Freq: YEARLY, Bymonthday: []int{-32}},
+			rrule:   ROption{Freq: Yearly, Bymonthday: []int{-32}},
 			wantErr: "bymonthday must be between 1 and 31 or -1 and -31",
 		},
 		{
 			desc:    "Byyearday under",
-			rrule:   ROption{Freq: YEARLY, Byyearday: []int{0}},
+			rrule:   ROption{Freq: Yearly, Byyearday: []int{0}},
 			wantErr: "byyearday must be between 1 and 366 or -1 and -366",
 		},
 		{
 			desc:    "Byyearday over",
-			rrule:   ROption{Freq: YEARLY, Byyearday: []int{367}},
+			rrule:   ROption{Freq: Yearly, Byyearday: []int{367}},
 			wantErr: "byyearday must be between 1 and 366 or -1 and -366",
 		},
 		{
 			desc:    "Byyearday under negative",
-			rrule:   ROption{Freq: YEARLY, Byyearday: []int{-367}},
+			rrule:   ROption{Freq: Yearly, Byyearday: []int{-367}},
 			wantErr: "byyearday must be between 1 and 366 or -1 and -366",
 		},
 		{
 			desc:    "Byweekno under",
-			rrule:   ROption{Freq: YEARLY, Byweekno: []int{0}},
+			rrule:   ROption{Freq: Yearly, Byweekno: []int{0}},
 			wantErr: "byweekno must be between 1 and 53 or -1 and -53",
 		},
 		{
 			desc:    "Byweekno over",
-			rrule:   ROption{Freq: YEARLY, Byweekno: []int{54}},
+			rrule:   ROption{Freq: Yearly, Byweekno: []int{54}},
 			wantErr: "byweekno must be between 1 and 53 or -1 and -53",
 		},
 		{
 			desc:    "Byweekno under negative",
-			rrule:   ROption{Freq: YEARLY, Byweekno: []int{-54}},
+			rrule:   ROption{Freq: Yearly, Byweekno: []int{-54}},
 			wantErr: "byweekno must be between 1 and 53 or -1 and -53",
 		},
 		{
 			desc:    "Bymonth under",
-			rrule:   ROption{Freq: YEARLY, Bymonth: []int{0}},
+			rrule:   ROption{Freq: Yearly, Bymonth: []int{0}},
 			wantErr: "bymonth must be between 1 and 12",
 		},
 		{
 			desc:    "Bymonth over",
-			rrule:   ROption{Freq: YEARLY, Bymonth: []int{13}},
+			rrule:   ROption{Freq: Yearly, Bymonth: []int{13}},
 			wantErr: "bymonth must be between 1 and 12",
 		},
 		{
 			desc:    "Bysetpos under",
-			rrule:   ROption{Freq: YEARLY, Bysetpos: []int{0}},
+			rrule:   ROption{Freq: Yearly, Bysetpos: []int{0}},
 			wantErr: "bysetpos must be between 1 and 366 or -1 and -366",
 		},
 		{
 			desc:    "Bysetpos over",
-			rrule:   ROption{Freq: YEARLY, Bysetpos: []int{367}},
+			rrule:   ROption{Freq: Yearly, Bysetpos: []int{367}},
 			wantErr: "bysetpos must be between 1 and 366 or -1 and -366",
 		},
 		{
 			desc:    "Bysetpos under negative",
-			rrule:   ROption{Freq: YEARLY, Bysetpos: []int{-367}},
+			rrule:   ROption{Freq: Yearly, Bysetpos: []int{-367}},
 			wantErr: "bysetpos must be between 1 and 366 or -1 and -366",
 		},
 		{
 			desc:    "Byday under",
-			rrule:   ROption{Freq: YEARLY, Byweekday: []Weekday{{1, -54}}},
+			rrule:   ROption{Freq: Yearly, Byweekday: []Weekday{{1, -54}}},
 			wantErr: "byday must be between 1 and 53 or -1 and -53",
 		},
 		{
 			desc:    "Byday over",
-			rrule:   ROption{Freq: YEARLY, Byweekday: []Weekday{{1, 54}}},
+			rrule:   ROption{Freq: Yearly, Byweekday: []Weekday{{1, 54}}},
 			wantErr: "byday must be between 1 and 53 or -1 and -53",
 		},
 		{
 			desc:    "Interval under",
-			rrule:   ROption{Freq: DAILY, Interval: -1},
+			rrule:   ROption{Freq: Daily, Interval: -1},
 			wantErr: "interval must be greater than 0",
 		},
 	}
@@ -213,7 +213,7 @@ func TestInvalidRRules(t *testing.T) {
 }
 
 func TestHourlyInvalidAndRepeatedBysetpos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY, Bysetpos: []int{1, -1, 2},
+	r, _ := NewRRule(ROption{Freq: Hourly, Bysetpos: []int{1, -1, 2},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 2, 11, 0, 0, 0, time.UTC)})
 	value := r.All()
@@ -226,7 +226,7 @@ func TestHourlyInvalidAndRepeatedBysetpos(t *testing.T) {
 }
 
 func TestNoAfter(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := time.Time{}
@@ -239,7 +239,7 @@ func TestNoAfter(t *testing.T) {
 // Test cases from Python Dateutil
 
 func TestYearly(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -252,7 +252,7 @@ func TestYearly(t *testing.T) {
 }
 
 func TestYearlyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -266,7 +266,7 @@ func TestYearlyInterval(t *testing.T) {
 }
 
 func TestYearlyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Interval: 100,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -280,7 +280,7 @@ func TestYearlyIntervalLarge(t *testing.T) {
 }
 
 func TestYearlyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -294,7 +294,7 @@ func TestYearlyByMonth(t *testing.T) {
 }
 
 func TestYearlyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -308,7 +308,7 @@ func TestYearlyByMonthDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -323,9 +323,9 @@ func TestYearlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestYearlyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC),
@@ -337,9 +337,9 @@ func TestYearlyByWeekDay(t *testing.T) {
 }
 
 func TestYearlyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 25, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -351,9 +351,9 @@ func TestYearlyByNWeekDay(t *testing.T) {
 }
 
 func TestYearlyByNWeekDayLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(3), TH.Nth(-3)},
+		Byweekday: []Weekday{Tuesday.Nth(3), Thursday.Nth(-3)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 11, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 20, 9, 0, 0, 0, time.UTC),
@@ -365,10 +365,10 @@ func TestYearlyByNWeekDayLarge(t *testing.T) {
 }
 
 func TestYearlyByMonthAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -380,10 +380,10 @@ func TestYearlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 29, 9, 0, 0, 0, time.UTC),
@@ -397,10 +397,10 @@ func TestYearlyByMonthAndNWeekDay(t *testing.T) {
 func TestYearlyByMonthAndNWeekDayLarge(t *testing.T) {
 	// This is interesting because the TH.Nth(-3) ends up before
 	// the TU.Nth(3).
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(3), TH.Nth(-3)},
+		Byweekday: []Weekday{Tuesday.Nth(3), Thursday.Nth(-3)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 15, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 20, 9, 0, 0, 0, time.UTC),
@@ -412,10 +412,10 @@ func TestYearlyByMonthAndNWeekDayLarge(t *testing.T) {
 }
 
 func TestYearlyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 2, 3, 9, 0, 0, 0, time.UTC),
@@ -427,11 +427,11 @@ func TestYearlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 3, 3, 9, 0, 0, 0, time.UTC),
@@ -443,7 +443,7 @@ func TestYearlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestYearlyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -458,7 +458,7 @@ func TestYearlyByYearDay(t *testing.T) {
 }
 
 func TestYearlyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -473,7 +473,7 @@ func TestYearlyByYearDayNeg(t *testing.T) {
 }
 
 func TestYearlyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -489,7 +489,7 @@ func TestYearlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestYearlyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -505,7 +505,7 @@ func TestYearlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestYearlyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -521,10 +521,10 @@ func TestYearlyByWeekNo(t *testing.T) {
 func TestYearlyByWeekNoAndWeekDay(t *testing.T) {
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 4, 9, 0, 0, 0, time.UTC),
@@ -538,10 +538,10 @@ func TestYearlyByWeekNoAndWeekDay(t *testing.T) {
 func TestYearlyByWeekNoAndWeekDayLarge(t *testing.T) {
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -553,10 +553,10 @@ func TestYearlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestYearlyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 3, 9, 0, 0, 0, time.UTC),
@@ -568,7 +568,7 @@ func TestYearlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestYearlyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -582,7 +582,7 @@ func TestYearlyByEaster(t *testing.T) {
 }
 
 func TestYearlyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -596,7 +596,7 @@ func TestYearlyByEasterPos(t *testing.T) {
 }
 
 func TestYearlyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -610,10 +610,10 @@ func TestYearlyByEasterNeg(t *testing.T) {
 }
 
 func TestYearlyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(2004, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -625,7 +625,7 @@ func TestYearlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestYearlyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -639,7 +639,7 @@ func TestYearlyByHour(t *testing.T) {
 }
 
 func TestYearlyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -653,7 +653,7 @@ func TestYearlyByMinute(t *testing.T) {
 }
 
 func TestYearlyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -667,7 +667,7 @@ func TestYearlyBySecond(t *testing.T) {
 }
 
 func TestYearlyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -682,7 +682,7 @@ func TestYearlyByHourAndMinute(t *testing.T) {
 }
 
 func TestYearlyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -697,7 +697,7 @@ func TestYearlyByHourAndSecond(t *testing.T) {
 }
 
 func TestYearlyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -712,7 +712,7 @@ func TestYearlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestYearlyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -728,7 +728,7 @@ func TestYearlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestYearlyBySetPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonthday: []int{15},
 		Byhour:     []int{6, 18},
@@ -744,7 +744,7 @@ func TestYearlyBySetPos(t *testing.T) {
 }
 
 func TestMonthly(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -757,7 +757,7 @@ func TestMonthly(t *testing.T) {
 }
 
 func TestMonthlyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -771,7 +771,7 @@ func TestMonthlyInterval(t *testing.T) {
 }
 
 func TestMonthlyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Interval: 18,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -785,7 +785,7 @@ func TestMonthlyIntervalLarge(t *testing.T) {
 }
 
 func TestMonthlyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -799,7 +799,7 @@ func TestMonthlyByMonth(t *testing.T) {
 }
 
 func TestMonthlyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -813,7 +813,7 @@ func TestMonthlyByMonthDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -828,9 +828,9 @@ func TestMonthlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestMonthlyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC),
@@ -842,9 +842,9 @@ func TestMonthlyByWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 25, 9, 0, 0, 0, time.UTC),
@@ -856,9 +856,9 @@ func TestMonthlyByNWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByNWeekDayLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(3), TH.Nth(-3)},
+		Byweekday: []Weekday{Tuesday.Nth(3), Thursday.Nth(-3)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 11, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 16, 9, 0, 0, 0, time.UTC),
@@ -870,10 +870,10 @@ func TestMonthlyByNWeekDayLarge(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -885,10 +885,10 @@ func TestMonthlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 29, 9, 0, 0, 0, time.UTC),
@@ -900,10 +900,10 @@ func TestMonthlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndNWeekDayLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(3), TH.Nth(-3)},
+		Byweekday: []Weekday{Tuesday.Nth(3), Thursday.Nth(-3)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 15, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 20, 9, 0, 0, 0, time.UTC),
@@ -915,10 +915,10 @@ func TestMonthlyByMonthAndNWeekDayLarge(t *testing.T) {
 }
 
 func TestMonthlyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 2, 3, 9, 0, 0, 0, time.UTC),
@@ -930,11 +930,11 @@ func TestMonthlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 3, 3, 9, 0, 0, 0, time.UTC),
@@ -946,7 +946,7 @@ func TestMonthlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMonthlyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -961,7 +961,7 @@ func TestMonthlyByYearDay(t *testing.T) {
 }
 
 func TestMonthlyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -976,7 +976,7 @@ func TestMonthlyByYearDayNeg(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -992,7 +992,7 @@ func TestMonthlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestMonthlyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -1008,7 +1008,7 @@ func TestMonthlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestMonthlyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1024,10 +1024,10 @@ func TestMonthlyByWeekNo(t *testing.T) {
 func TestMonthlyByWeekNoAndWeekDay(t *testing.T) {
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 4, 9, 0, 0, 0, time.UTC),
@@ -1041,10 +1041,10 @@ func TestMonthlyByWeekNoAndWeekDay(t *testing.T) {
 func TestMonthlyByWeekNoAndWeekDayLarge(t *testing.T) {
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -1056,10 +1056,10 @@ func TestMonthlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestMonthlyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 3, 9, 0, 0, 0, time.UTC),
@@ -1071,10 +1071,10 @@ func TestMonthlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestMonthlyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(2004, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -1086,7 +1086,7 @@ func TestMonthlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestMonthlyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1100,7 +1100,7 @@ func TestMonthlyByEaster(t *testing.T) {
 }
 
 func TestMonthlyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1114,7 +1114,7 @@ func TestMonthlyByEasterPos(t *testing.T) {
 }
 
 func TestMonthlyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1128,7 +1128,7 @@ func TestMonthlyByEasterNeg(t *testing.T) {
 }
 
 func TestMonthlyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1142,7 +1142,7 @@ func TestMonthlyByHour(t *testing.T) {
 }
 
 func TestMonthlyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1156,7 +1156,7 @@ func TestMonthlyByMinute(t *testing.T) {
 }
 
 func TestMonthlyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1170,7 +1170,7 @@ func TestMonthlyBySecond(t *testing.T) {
 }
 
 func TestMonthlyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -1185,7 +1185,7 @@ func TestMonthlyByHourAndMinute(t *testing.T) {
 }
 
 func TestMonthlyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -1200,7 +1200,7 @@ func TestMonthlyByHourAndSecond(t *testing.T) {
 }
 
 func TestMonthlyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -1215,7 +1215,7 @@ func TestMonthlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestMonthlyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -1231,7 +1231,7 @@ func TestMonthlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestMonthlyBySetPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MONTHLY,
+	r, _ := NewRRule(ROption{Freq: Monthly,
 		Count:      3,
 		Bymonthday: []int{13, 17},
 		Byhour:     []int{6, 18},
@@ -1247,7 +1247,7 @@ func TestMonthlyBySetPos(t *testing.T) {
 }
 
 func TestWeekly(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -1260,7 +1260,7 @@ func TestWeekly(t *testing.T) {
 }
 
 func TestWeeklyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1274,7 +1274,7 @@ func TestWeeklyInterval(t *testing.T) {
 }
 
 func TestWeeklyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Interval: 20,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1288,7 +1288,7 @@ func TestWeeklyIntervalLarge(t *testing.T) {
 }
 
 func TestWeeklyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1302,7 +1302,7 @@ func TestWeeklyByMonth(t *testing.T) {
 }
 
 func TestWeeklyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1316,7 +1316,7 @@ func TestWeeklyByMonthDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -1331,9 +1331,9 @@ func TestWeeklyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestWeeklyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC),
@@ -1345,9 +1345,9 @@ func TestWeeklyByWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC),
@@ -1362,10 +1362,10 @@ func TestWeeklyByMonthAndWeekDay(t *testing.T) {
 	// This test is interesting, because it crosses the year
 	// boundary in a weekly period to find day '1' as a
 	// valid recurrence.
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -1377,10 +1377,10 @@ func TestWeeklyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -1392,10 +1392,10 @@ func TestWeeklyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 2, 3, 9, 0, 0, 0, time.UTC),
@@ -1407,11 +1407,11 @@ func TestWeeklyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 3, 3, 9, 0, 0, 0, time.UTC),
@@ -1423,7 +1423,7 @@ func TestWeeklyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestWeeklyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1438,7 +1438,7 @@ func TestWeeklyByYearDay(t *testing.T) {
 }
 
 func TestWeeklyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1453,7 +1453,7 @@ func TestWeeklyByYearDayNeg(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Bymonth:   []int{1, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -1469,7 +1469,7 @@ func TestWeeklyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestWeeklyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     4,
 		Bymonth:   []int{1, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -1485,7 +1485,7 @@ func TestWeeklyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestWeeklyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1501,10 +1501,10 @@ func TestWeeklyByWeekNo(t *testing.T) {
 func TestWeeklyByWeekNoAndWeekDay(t *testing.T) {
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 4, 9, 0, 0, 0, time.UTC),
@@ -1518,10 +1518,10 @@ func TestWeeklyByWeekNoAndWeekDay(t *testing.T) {
 func TestWeeklyByWeekNoAndWeekDayLarge(t *testing.T) {
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -1533,10 +1533,10 @@ func TestWeeklyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestWeeklyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 3, 9, 0, 0, 0, time.UTC),
@@ -1548,10 +1548,10 @@ func TestWeeklyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestWeeklyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(2004, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -1563,7 +1563,7 @@ func TestWeeklyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestWeeklyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1577,7 +1577,7 @@ func TestWeeklyByEaster(t *testing.T) {
 }
 
 func TestWeeklyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1591,7 +1591,7 @@ func TestWeeklyByEasterPos(t *testing.T) {
 }
 
 func TestWeeklyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1605,7 +1605,7 @@ func TestWeeklyByEasterNeg(t *testing.T) {
 }
 
 func TestWeeklyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1619,7 +1619,7 @@ func TestWeeklyByHour(t *testing.T) {
 }
 
 func TestWeeklyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1633,7 +1633,7 @@ func TestWeeklyByMinute(t *testing.T) {
 }
 
 func TestWeeklyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1647,7 +1647,7 @@ func TestWeeklyBySecond(t *testing.T) {
 }
 
 func TestWeeklyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -1662,7 +1662,7 @@ func TestWeeklyByHourAndMinute(t *testing.T) {
 }
 
 func TestWeeklyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -1677,7 +1677,7 @@ func TestWeeklyByHourAndSecond(t *testing.T) {
 }
 
 func TestWeeklyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -1692,7 +1692,7 @@ func TestWeeklyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestWeeklyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -1708,9 +1708,9 @@ func TestWeeklyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestWeeklyBySetPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Byhour:    []int{6, 18},
 		Bysetpos:  []int{3, -3},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1724,7 +1724,7 @@ func TestWeeklyBySetPos(t *testing.T) {
 }
 
 func TestDaily(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -1737,7 +1737,7 @@ func TestDaily(t *testing.T) {
 }
 
 func TestDailyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1751,7 +1751,7 @@ func TestDailyInterval(t *testing.T) {
 }
 
 func TestDailyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Interval: 92,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1765,7 +1765,7 @@ func TestDailyIntervalLarge(t *testing.T) {
 }
 
 func TestDailyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1779,7 +1779,7 @@ func TestDailyByMonth(t *testing.T) {
 }
 
 func TestDailyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1793,7 +1793,7 @@ func TestDailyByMonthDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -1808,9 +1808,9 @@ func TestDailyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestDailyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC),
@@ -1822,9 +1822,9 @@ func TestDailyByWeekDay(t *testing.T) {
 }
 
 func TestDailyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC),
@@ -1836,10 +1836,10 @@ func TestDailyByNWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -1851,10 +1851,10 @@ func TestDailyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 6, 9, 0, 0, 0, time.UTC),
@@ -1866,10 +1866,10 @@ func TestDailyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 2, 3, 9, 0, 0, 0, time.UTC),
@@ -1881,11 +1881,11 @@ func TestDailyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 3, 3, 9, 0, 0, 0, time.UTC),
@@ -1897,7 +1897,7 @@ func TestDailyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestDailyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1912,7 +1912,7 @@ func TestDailyByYearDay(t *testing.T) {
 }
 
 func TestDailyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1927,7 +1927,7 @@ func TestDailyByYearDayNeg(t *testing.T) {
 }
 
 func TestDailyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Bymonth:   []int{1, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -1943,7 +1943,7 @@ func TestDailyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestDailyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     4,
 		Bymonth:   []int{1, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -1959,7 +1959,7 @@ func TestDailyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestDailyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -1975,10 +1975,10 @@ func TestDailyByWeekNo(t *testing.T) {
 func TestDailyByWeekNoAndWeekDay(t *testing.T) {
 	// That's a nice one. The first days of week number one
 	// may be in the last year.
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 4, 9, 0, 0, 0, time.UTC),
@@ -1992,10 +1992,10 @@ func TestDailyByWeekNoAndWeekDay(t *testing.T) {
 func TestDailyByWeekNoAndWeekDayLarge(t *testing.T) {
 	// Another nice test. The last days of week number 52/53
 	// may be in the next year.
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -2007,10 +2007,10 @@ func TestDailyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestDailyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(1999, 1, 3, 9, 0, 0, 0, time.UTC),
@@ -2022,10 +2022,10 @@ func TestDailyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestDailyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 9, 0, 0, 0, time.UTC),
 		time.Date(2004, 12, 27, 9, 0, 0, 0, time.UTC),
@@ -2037,7 +2037,7 @@ func TestDailyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestDailyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2051,7 +2051,7 @@ func TestDailyByEaster(t *testing.T) {
 }
 
 func TestDailyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2065,7 +2065,7 @@ func TestDailyByEasterPos(t *testing.T) {
 }
 
 func TestDailyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2079,7 +2079,7 @@ func TestDailyByEasterNeg(t *testing.T) {
 }
 
 func TestDailyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2093,7 +2093,7 @@ func TestDailyByHour(t *testing.T) {
 }
 
 func TestDailyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2107,7 +2107,7 @@ func TestDailyByMinute(t *testing.T) {
 }
 
 func TestDailyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2121,7 +2121,7 @@ func TestDailyBySecond(t *testing.T) {
 }
 
 func TestDailyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -2136,7 +2136,7 @@ func TestDailyByHourAndMinute(t *testing.T) {
 }
 
 func TestDailyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -2151,7 +2151,7 @@ func TestDailyByHourAndSecond(t *testing.T) {
 }
 
 func TestDailyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -2166,7 +2166,7 @@ func TestDailyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestDailyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -2182,7 +2182,7 @@ func TestDailyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestDailyBySetPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{15, 45},
@@ -2198,7 +2198,7 @@ func TestDailyBySetPos(t *testing.T) {
 }
 
 func TestHourly(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -2211,7 +2211,7 @@ func TestHourly(t *testing.T) {
 }
 
 func TestHourlyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2225,7 +2225,7 @@ func TestHourlyInterval(t *testing.T) {
 }
 
 func TestHourlyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Interval: 769,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2239,7 +2239,7 @@ func TestHourlyIntervalLarge(t *testing.T) {
 }
 
 func TestHourlyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2253,7 +2253,7 @@ func TestHourlyByMonth(t *testing.T) {
 }
 
 func TestHourlyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2267,7 +2267,7 @@ func TestHourlyByMonthDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -2282,9 +2282,9 @@ func TestHourlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestHourlyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 2, 10, 0, 0, 0, time.UTC),
@@ -2296,9 +2296,9 @@ func TestHourlyByWeekDay(t *testing.T) {
 }
 
 func TestHourlyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 2, 10, 0, 0, 0, time.UTC),
@@ -2310,10 +2310,10 @@ func TestHourlyByNWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 1, 0, 0, 0, time.UTC),
@@ -2325,10 +2325,10 @@ func TestHourlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 1, 0, 0, 0, time.UTC),
@@ -2340,10 +2340,10 @@ func TestHourlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 1, 0, 0, 0, time.UTC),
@@ -2355,11 +2355,11 @@ func TestHourlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 1, 0, 0, 0, time.UTC),
@@ -2371,7 +2371,7 @@ func TestHourlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2386,7 +2386,7 @@ func TestHourlyByYearDay(t *testing.T) {
 }
 
 func TestHourlyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2401,7 +2401,7 @@ func TestHourlyByYearDayNeg(t *testing.T) {
 }
 
 func TestHourlyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -2417,7 +2417,7 @@ func TestHourlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestHourlyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -2433,7 +2433,7 @@ func TestHourlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestHourlyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2447,10 +2447,10 @@ func TestHourlyByWeekNo(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 29, 1, 0, 0, 0, time.UTC),
@@ -2462,10 +2462,10 @@ func TestHourlyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDayLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 28, 1, 0, 0, 0, time.UTC),
@@ -2477,10 +2477,10 @@ func TestHourlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 28, 1, 0, 0, 0, time.UTC),
@@ -2492,10 +2492,10 @@ func TestHourlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestHourlyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 28, 1, 0, 0, 0, time.UTC),
@@ -2507,7 +2507,7 @@ func TestHourlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestHourlyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2521,7 +2521,7 @@ func TestHourlyByEaster(t *testing.T) {
 }
 
 func TestHourlyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2535,7 +2535,7 @@ func TestHourlyByEasterPos(t *testing.T) {
 }
 
 func TestHourlyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2549,7 +2549,7 @@ func TestHourlyByEasterNeg(t *testing.T) {
 }
 
 func TestHourlyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2563,7 +2563,7 @@ func TestHourlyByHour(t *testing.T) {
 }
 
 func TestHourlyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2577,7 +2577,7 @@ func TestHourlyByMinute(t *testing.T) {
 }
 
 func TestHourlyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2591,7 +2591,7 @@ func TestHourlyBySecond(t *testing.T) {
 }
 
 func TestHourlyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -2606,7 +2606,7 @@ func TestHourlyByHourAndMinute(t *testing.T) {
 }
 
 func TestHourlyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -2621,7 +2621,7 @@ func TestHourlyByHourAndSecond(t *testing.T) {
 }
 
 func TestHourlyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -2636,7 +2636,7 @@ func TestHourlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestHourlyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -2652,7 +2652,7 @@ func TestHourlyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestHourlyBySetPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: HOURLY,
+	r, _ := NewRRule(ROption{Freq: Hourly,
 		Count:    3,
 		Byminute: []int{15, 45},
 		Bysecond: []int{15, 45},
@@ -2668,7 +2668,7 @@ func TestHourlyBySetPos(t *testing.T) {
 }
 
 func TestMinutely(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -2681,7 +2681,7 @@ func TestMinutely(t *testing.T) {
 }
 
 func TestMinutelyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2695,7 +2695,7 @@ func TestMinutelyInterval(t *testing.T) {
 }
 
 func TestMinutelyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Interval: 1501,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2709,7 +2709,7 @@ func TestMinutelyIntervalLarge(t *testing.T) {
 }
 
 func TestMinutelyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2723,7 +2723,7 @@ func TestMinutelyByMonth(t *testing.T) {
 }
 
 func TestMinutelyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2737,7 +2737,7 @@ func TestMinutelyByMonthDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -2752,9 +2752,9 @@ func TestMinutelyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestMinutelyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 2, 9, 1, 0, 0, time.UTC),
@@ -2766,9 +2766,9 @@ func TestMinutelyByWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 2, 9, 1, 0, 0, time.UTC),
@@ -2780,10 +2780,10 @@ func TestMinutelyByNWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 1, 0, 0, time.UTC),
@@ -2795,10 +2795,10 @@ func TestMinutelyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 1, 0, 0, time.UTC),
@@ -2810,10 +2810,10 @@ func TestMinutelyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 1, 0, 0, time.UTC),
@@ -2825,11 +2825,11 @@ func TestMinutelyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 1, 0, 0, time.UTC),
@@ -2841,7 +2841,7 @@ func TestMinutelyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2856,7 +2856,7 @@ func TestMinutelyByYearDay(t *testing.T) {
 }
 
 func TestMinutelyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2871,7 +2871,7 @@ func TestMinutelyByYearDayNeg(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -2887,7 +2887,7 @@ func TestMinutelyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestMinutelyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -2903,7 +2903,7 @@ func TestMinutelyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestMinutelyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2917,10 +2917,10 @@ func TestMinutelyByWeekNo(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 29, 0, 1, 0, 0, time.UTC),
@@ -2932,10 +2932,10 @@ func TestMinutelyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDayLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 28, 0, 1, 0, 0, time.UTC),
@@ -2947,10 +2947,10 @@ func TestMinutelyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 28, 0, 1, 0, 0, time.UTC),
@@ -2962,10 +2962,10 @@ func TestMinutelyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestMinutelyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 28, 0, 1, 0, 0, time.UTC),
@@ -2977,7 +2977,7 @@ func TestMinutelyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestMinutelyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -2991,7 +2991,7 @@ func TestMinutelyByEaster(t *testing.T) {
 }
 
 func TestMinutelyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3005,7 +3005,7 @@ func TestMinutelyByEasterPos(t *testing.T) {
 }
 
 func TestMinutelyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3019,7 +3019,7 @@ func TestMinutelyByEasterNeg(t *testing.T) {
 }
 
 func TestMinutelyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3033,7 +3033,7 @@ func TestMinutelyByHour(t *testing.T) {
 }
 
 func TestMinutelyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3047,7 +3047,7 @@ func TestMinutelyByMinute(t *testing.T) {
 }
 
 func TestMinutelyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3061,7 +3061,7 @@ func TestMinutelyBySecond(t *testing.T) {
 }
 
 func TestMinutelyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -3076,7 +3076,7 @@ func TestMinutelyByHourAndMinute(t *testing.T) {
 }
 
 func TestMinutelyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -3091,7 +3091,7 @@ func TestMinutelyByHourAndSecond(t *testing.T) {
 }
 
 func TestMinutelyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -3106,7 +3106,7 @@ func TestMinutelyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestMinutelyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -3122,7 +3122,7 @@ func TestMinutelyByHourAndMinuteAndSecond(t *testing.T) {
 }
 
 func TestMinutelyBySetPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: MINUTELY,
+	r, _ := NewRRule(ROption{Freq: Minutely,
 		Count:    3,
 		Bysecond: []int{15, 30, 45},
 		Bysetpos: []int{3, -3},
@@ -3137,7 +3137,7 @@ func TestMinutelyBySetPos(t *testing.T) {
 }
 
 func TestSecondly(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3150,7 +3150,7 @@ func TestSecondly(t *testing.T) {
 }
 
 func TestSecondlyInterval(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Interval: 2,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3164,7 +3164,7 @@ func TestSecondlyInterval(t *testing.T) {
 }
 
 func TestSecondlyIntervalLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Interval: 90061,
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3178,7 +3178,7 @@ func TestSecondlyIntervalLarge(t *testing.T) {
 }
 
 func TestSecondlyByMonth(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:   3,
 		Bymonth: []int{1, 3},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3192,7 +3192,7 @@ func TestSecondlyByMonth(t *testing.T) {
 }
 
 func TestSecondlyByMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3206,7 +3206,7 @@ func TestSecondlyByMonthDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndMonthDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{5, 7},
@@ -3221,9 +3221,9 @@ func TestSecondlyByMonthAndMonthDay(t *testing.T) {
 }
 
 func TestSecondlyByWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 2, 9, 0, 1, 0, time.UTC),
@@ -3235,9 +3235,9 @@ func TestSecondlyByWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 2, 9, 0, 1, 0, time.UTC),
@@ -3249,10 +3249,10 @@ func TestSecondlyByNWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU, TH},
+		Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 0, 1, 0, time.UTC),
@@ -3264,10 +3264,10 @@ func TestSecondlyByMonthAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndNWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Bymonth:   []int{1, 3},
-		Byweekday: []Weekday{TU.Nth(1), TH.Nth(-1)},
+		Byweekday: []Weekday{Tuesday.Nth(1), Thursday.Nth(-1)},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 0, 1, 0, time.UTC),
@@ -3279,10 +3279,10 @@ func TestSecondlyByMonthAndNWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 0, 1, 0, time.UTC),
@@ -3294,11 +3294,11 @@ func TestSecondlyByMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:      3,
 		Bymonth:    []int{1, 3},
 		Bymonthday: []int{1, 3},
-		Byweekday:  []Weekday{TU, TH},
+		Byweekday:  []Weekday{Tuesday, Thursday},
 		Dtstart:    time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 1, 1, 0, 0, 1, 0, time.UTC),
@@ -3310,7 +3310,7 @@ func TestSecondlyByMonthAndMonthDayAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Byyearday: []int{1, 100, 200, 365},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3325,7 +3325,7 @@ func TestSecondlyByYearDay(t *testing.T) {
 }
 
 func TestSecondlyByYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Byyearday: []int{-365, -266, -166, -1},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3340,7 +3340,7 @@ func TestSecondlyByYearDayNeg(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndYearDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{1, 100, 200, 365},
@@ -3356,7 +3356,7 @@ func TestSecondlyByMonthAndYearDay(t *testing.T) {
 }
 
 func TestSecondlyByMonthAndYearDayNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     4,
 		Bymonth:   []int{4, 7},
 		Byyearday: []int{-365, -266, -166, -1},
@@ -3372,7 +3372,7 @@ func TestSecondlyByMonthAndYearDayNeg(t *testing.T) {
 }
 
 func TestSecondlyByWeekNo(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byweekno: []int{20},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3386,10 +3386,10 @@ func TestSecondlyByWeekNo(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDay(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{1},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 29, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 29, 0, 0, 1, 0, time.UTC),
@@ -3401,10 +3401,10 @@ func TestSecondlyByWeekNoAndWeekDay(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDayLarge(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{52},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 28, 0, 0, 1, 0, time.UTC),
@@ -3416,10 +3416,10 @@ func TestSecondlyByWeekNoAndWeekDayLarge(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDayLast(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{-1},
-		Byweekday: []Weekday{SU},
+		Byweekday: []Weekday{Sunday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1997, 12, 28, 0, 0, 1, 0, time.UTC),
@@ -3431,10 +3431,10 @@ func TestSecondlyByWeekNoAndWeekDayLast(t *testing.T) {
 }
 
 func TestSecondlyByWeekNoAndWeekDay53(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:     3,
 		Byweekno:  []int{53},
-		Byweekday: []Weekday{MO},
+		Byweekday: []Weekday{Monday},
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1998, 12, 28, 0, 0, 0, 0, time.UTC),
 		time.Date(1998, 12, 28, 0, 0, 1, 0, time.UTC),
@@ -3446,7 +3446,7 @@ func TestSecondlyByWeekNoAndWeekDay53(t *testing.T) {
 }
 
 func TestSecondlyByEaster(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byeaster: []int{0},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3460,7 +3460,7 @@ func TestSecondlyByEaster(t *testing.T) {
 }
 
 func TestSecondlyByEasterPos(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byeaster: []int{1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3474,7 +3474,7 @@ func TestSecondlyByEasterPos(t *testing.T) {
 }
 
 func TestSecondlyByEasterNeg(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byeaster: []int{-1},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3488,7 +3488,7 @@ func TestSecondlyByEasterNeg(t *testing.T) {
 }
 
 func TestSecondlyByHour(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:   3,
 		Byhour:  []int{6, 18},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3502,7 +3502,7 @@ func TestSecondlyByHour(t *testing.T) {
 }
 
 func TestSecondlyByMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3516,7 +3516,7 @@ func TestSecondlyByMinute(t *testing.T) {
 }
 
 func TestSecondlyBySecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Bysecond: []int{6, 18},
 		Dtstart:  time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3530,7 +3530,7 @@ func TestSecondlyBySecond(t *testing.T) {
 }
 
 func TestSecondlyByHourAndMinute(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -3545,7 +3545,7 @@ func TestSecondlyByHourAndMinute(t *testing.T) {
 }
 
 func TestSecondlyByHourAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -3560,7 +3560,7 @@ func TestSecondlyByHourAndSecond(t *testing.T) {
 }
 
 func TestSecondlyByMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byminute: []int{6, 18},
 		Bysecond: []int{6, 18},
@@ -3575,7 +3575,7 @@ func TestSecondlyByMinuteAndSecond(t *testing.T) {
 }
 
 func TestSecondlyByHourAndMinuteAndSecond(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Byhour:   []int{6, 18},
 		Byminute: []int{6, 18},
@@ -3592,7 +3592,7 @@ func TestSecondlyByHourAndMinuteAndSecond(t *testing.T) {
 
 func TestSecondlyByHourAndMinuteAndSecondBug(t *testing.T) {
 	// This explores a bug found by Mathieu Bridon.
-	r, _ := NewRRule(ROption{Freq: SECONDLY,
+	r, _ := NewRRule(ROption{Freq: Secondly,
 		Count:    3,
 		Bysecond: []int{0},
 		Byminute: []int{1},
@@ -3607,7 +3607,7 @@ func TestSecondlyByHourAndMinuteAndSecondBug(t *testing.T) {
 }
 
 func TestUntilNotMatching(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 5, 8, 0, 0, 0, time.UTC)})
@@ -3621,7 +3621,7 @@ func TestUntilNotMatching(t *testing.T) {
 }
 
 func TestUntilMatching(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC)})
@@ -3635,7 +3635,7 @@ func TestUntilMatching(t *testing.T) {
 }
 
 func TestUntilSingle(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
@@ -3647,7 +3647,7 @@ func TestUntilSingle(t *testing.T) {
 }
 
 func TestUntilEmpty(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 1, 9, 0, 0, 0, time.UTC)})
@@ -3659,7 +3659,7 @@ func TestUntilEmpty(t *testing.T) {
 }
 
 func TestUntilWithDate(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		Until:   time.Date(1997, 9, 5, 0, 0, 0, 0, time.UTC)})
@@ -3673,11 +3673,11 @@ func TestUntilWithDate(t *testing.T) {
 }
 
 func TestWkStIntervalMO(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Interval:  2,
-		Byweekday: []Weekday{TU, SU},
-		Wkst:      MO,
+		Byweekday: []Weekday{Tuesday, Sunday},
+		Wkst:      Monday,
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 7, 9, 0, 0, 0, time.UTC),
@@ -3689,11 +3689,11 @@ func TestWkStIntervalMO(t *testing.T) {
 }
 
 func TestWkStIntervalSU(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: WEEKLY,
+	r, _ := NewRRule(ROption{Freq: Weekly,
 		Count:     3,
 		Interval:  2,
-		Byweekday: []Weekday{TU, SU},
-		Wkst:      SU,
+		Byweekday: []Weekday{Tuesday, Sunday},
+		Wkst:      Sunday,
 		Dtstart:   time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 		time.Date(1997, 9, 14, 9, 0, 0, 0, time.UTC),
@@ -3706,7 +3706,7 @@ func TestWkStIntervalSU(t *testing.T) {
 
 func TestDTStart(t *testing.T) {
 	dt := time.Now().UTC().Truncate(time.Second)
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 3})
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 3})
 	want := []time.Time{dt, dt.AddDate(1, 0, 0), dt.AddDate(2, 0, 0)}
 	value := r.All()
 	if !timesEqual(value, want) {
@@ -3723,7 +3723,7 @@ func TestDTStart(t *testing.T) {
 }
 
 func TestDTStartIsDate(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 0, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 0, 0, 0, 0, time.UTC),
@@ -3736,7 +3736,7 @@ func TestDTStartIsDate(t *testing.T) {
 }
 
 func TestDTStartWithMicroseconds(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		Count:   3,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 500000000, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3749,11 +3749,11 @@ func TestDTStartWithMicroseconds(t *testing.T) {
 }
 
 func TestUntil(t *testing.T) {
-	r1, _ := NewRRule(ROption{Freq: DAILY,
+	r1, _ := NewRRule(ROption{Freq: Daily,
 		Dtstart: time.Date(1997, 9, 2, 0, 0, 0, 0, time.UTC)})
 	r1.Until(time.Date(1998, 9, 2, 0, 0, 0, 0, time.UTC))
 
-	r2, _ := NewRRule(ROption{Freq: DAILY,
+	r2, _ := NewRRule(ROption{Freq: Daily,
 		Dtstart: time.Date(1997, 9, 2, 0, 0, 0, 0, time.UTC),
 		Until:   time.Date(1998, 9, 2, 0, 0, 0, 0, time.UTC)})
 
@@ -3763,7 +3763,7 @@ func TestUntil(t *testing.T) {
 		t.Errorf("get %v, want %v", v1, v2)
 	}
 
-	r3, _ := NewRRule(ROption{Freq: MONTHLY,
+	r3, _ := NewRRule(ROption{Freq: Monthly,
 		Dtstart: time.Date(MAXYEAR-100, 1, 1, 0, 0, 0, 0, time.UTC)})
 	r3.Until(time.Date(MAXYEAR+100, 1, 1, 0, 0, 0, 0, time.UTC))
 	v3 := r3.All()
@@ -3773,7 +3773,7 @@ func TestUntil(t *testing.T) {
 }
 
 func TestMaxYear(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Count:      3,
 		Bymonth:    []int{2},
 		Bymonthday: []int{31},
@@ -3786,7 +3786,7 @@ func TestMaxYear(t *testing.T) {
 }
 
 func TestBefore(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC)
@@ -3797,7 +3797,7 @@ func TestBefore(t *testing.T) {
 }
 
 func TestBeforeInc(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := time.Date(1997, 9, 5, 9, 0, 0, 0, time.UTC)
@@ -3808,7 +3808,7 @@ func TestBeforeInc(t *testing.T) {
 }
 
 func TestAfter(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 
@@ -3820,7 +3820,7 @@ func TestAfter(t *testing.T) {
 }
 
 func TestAfterInc(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC)
@@ -3831,7 +3831,7 @@ func TestAfterInc(t *testing.T) {
 }
 
 func TestBetween(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 3, 9, 0, 0, 0, time.UTC),
@@ -3844,7 +3844,7 @@ func TestBetween(t *testing.T) {
 }
 
 func TestBetweenInc(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: DAILY,
+	r, _ := NewRRule(ROption{Freq: Daily,
 		// Count:5,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	want := []time.Time{time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
@@ -3859,7 +3859,7 @@ func TestBetweenInc(t *testing.T) {
 }
 
 func TestAllWithDefaultUtil(t *testing.T) {
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 
 	value := r.All()
@@ -3867,7 +3867,7 @@ func TestAllWithDefaultUtil(t *testing.T) {
 		t.Errorf("No default Util time")
 	}
 
-	r, _ = NewRRule(ROption{Freq: YEARLY})
+	r, _ = NewRRule(ROption{Freq: Yearly})
 	if len(r.All()) != len(value) {
 		t.Errorf("No default Util time")
 	}
@@ -3899,9 +3899,9 @@ func TestRuleChangeDTStartTimezoneRespected(t *testing.T) {
 
 	rule, err := NewRRule(
 		ROption{
-			Freq:    DAILY,
+			Freq:    Daily,
 			Count:   10,
-			Wkst:    MO,
+			Wkst:    Monday,
 			Dtstart: time.Date(2019, 3, 6, 1, 1, 1, 0, loc),
 		},
 	)
@@ -3937,49 +3937,49 @@ func BenchmarkIterator(b *testing.B) {
 			Name: "simple secondly",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    SECONDLY,
+				Freq:    Secondly,
 			},
 		},
 		{
 			Name: "simple minutely",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    MINUTELY,
+				Freq:    Minutely,
 			},
 		},
 		{
 			Name: "simple hourly",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    HOURLY,
+				Freq:    Hourly,
 			},
 		},
 		{
 			Name: "simple daily",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    DAILY,
+				Freq:    Daily,
 			},
 		},
 		{
 			Name: "simple weekly",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    WEEKLY,
+				Freq:    Weekly,
 			},
 		},
 		{
 			Name: "simple monthly",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    MONTHLY,
+				Freq:    Monthly,
 			},
 		},
 		{
 			Name: "simple yearly",
 			Option: ROption{
 				Dtstart: time.Date(2000, 03, 22, 12, 0, 0, 0, time.UTC),
-				Freq:    YEARLY,
+				Freq:    Yearly,
 			},
 		},
 	} {

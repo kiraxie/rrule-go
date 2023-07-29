@@ -9,7 +9,7 @@ import (
 
 func TestSet(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 2, Byweekday: []Weekday{TU},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 2, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	value := set.All()
@@ -22,7 +22,7 @@ func TestSet(t *testing.T) {
 
 func TestSetOverlapping(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY,
+	r, _ := NewRRule(ROption{Freq: Yearly,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	v1 := set.All()
@@ -37,7 +37,7 @@ func TestSetString(t *testing.T) {
 	tehran, _ := time.LoadLocation("Asia/Tehran")
 
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 1, Byweekday: []Weekday{TU},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 8, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.ExDate(time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC))
@@ -61,7 +61,7 @@ EXDATE;TZID=America/New_York:19970918T050000`
 
 func TestSetDTStart(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 1, Byweekday: []Weekday{TU},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.ExDate(time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC))
@@ -96,7 +96,7 @@ EXDATE:19970918T090000Z`
 
 func TestSetRecurrence(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 1, Byweekday: []Weekday{TU},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	value := set.Recurrence()
@@ -111,7 +111,7 @@ func TestSetRecurrence(t *testing.T) {
 
 func TestSetDate(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 1, Byweekday: []Weekday{TU},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.RDate(time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC))
@@ -127,7 +127,7 @@ func TestSetDate(t *testing.T) {
 
 func TestSetRDates(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 1, Byweekday: []Weekday{TU},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 1, Byweekday: []Weekday{Tuesday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.SetRDates([]time.Time{
@@ -147,7 +147,7 @@ func TestSetRDates(t *testing.T) {
 
 func TestSetExDate(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 6, Byweekday: []Weekday{TU, TH},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 6, Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.ExDate(time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC))
@@ -164,7 +164,7 @@ func TestSetExDate(t *testing.T) {
 
 func TestSetExDates(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: YEARLY, Count: 6, Byweekday: []Weekday{TU, TH},
+	r, _ := NewRRule(ROption{Freq: Yearly, Count: 6, Byweekday: []Weekday{Tuesday, Thursday},
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.SetExDates([]time.Time{
@@ -183,7 +183,7 @@ func TestSetExDates(t *testing.T) {
 
 func TestSetExDateRevOrder(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: MONTHLY, Count: 5, Bymonthday: []int{10},
+	r, _ := NewRRule(ROption{Freq: Monthly, Count: 5, Bymonthday: []int{10},
 		Dtstart: time.Date(2004, 1, 1, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	set.ExDate(time.Date(2004, 4, 10, 9, 0, 0, 0, time.UTC))
@@ -219,7 +219,7 @@ func TestSetDateAndExDate(t *testing.T) {
 
 func TestSetBefore(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: DAILY, Count: 7,
+	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	want := time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC)
@@ -231,7 +231,7 @@ func TestSetBefore(t *testing.T) {
 
 func TestSetBeforeInc(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: DAILY, Count: 7,
+	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	want := time.Date(1997, 9, 5, 9, 0, 0, 0, time.UTC)
@@ -243,7 +243,7 @@ func TestSetBeforeInc(t *testing.T) {
 
 func TestSetAfter(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: DAILY, Count: 7,
+	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	want := time.Date(1997, 9, 5, 9, 0, 0, 0, time.UTC)
@@ -255,7 +255,7 @@ func TestSetAfter(t *testing.T) {
 
 func TestSetAfterInc(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: DAILY, Count: 7,
+	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	want := time.Date(1997, 9, 4, 9, 0, 0, 0, time.UTC)
@@ -267,7 +267,7 @@ func TestSetAfterInc(t *testing.T) {
 
 func TestSetBetween(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: DAILY, Count: 7,
+	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	value := set.Between(time.Date(1997, 9, 3, 9, 0, 0, 0, time.UTC), time.Date(1997, 9, 6, 9, 0, 0, 0, time.UTC), false)
@@ -280,7 +280,7 @@ func TestSetBetween(t *testing.T) {
 
 func TestSetBetweenInc(t *testing.T) {
 	set := Set{}
-	r, _ := NewRRule(ROption{Freq: DAILY, Count: 7,
+	r, _ := NewRRule(ROption{Freq: Daily, Count: 7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
 	value := set.Between(time.Date(1997, 9, 3, 9, 0, 0, 0, time.UTC), time.Date(1997, 9, 6, 9, 0, 0, 0, time.UTC), true)
@@ -301,7 +301,7 @@ func TestSetTrickyTimeZones(t *testing.T) {
 	tehran, _ := time.LoadLocation("Asia/Tehran")
 
 	r, _ := NewRRule(ROption{
-		Freq:    DAILY,
+		Freq:    Daily,
 		Count:   4,
 		Dtstart: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC).In(moscow),
 	})
@@ -355,9 +355,9 @@ func TestRuleSetChangeDTStartTimezoneRespected(t *testing.T) {
 	ruleSet := &Set{}
 	rule, err := NewRRule(
 		ROption{
-			Freq:     DAILY,
+			Freq:     Daily,
 			Count:    10,
-			Wkst:     MO,
+			Wkst:     Monday,
 			Byhour:   []int{10},
 			Byminute: []int{0},
 			Bysecond: []int{0},

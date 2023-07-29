@@ -18,7 +18,7 @@ func printTimeSlice(ts []time.Time) {
 func ExampleRRule() {
 	// Daily, for 10 occurrences.
 	r, _ := rrule.NewRRule(rrule.ROption{
-		Freq:    rrule.DAILY,
+		Freq:    rrule.Daily,
 		Count:   10,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC),
 	})
@@ -41,11 +41,11 @@ func ExampleRRule() {
 
 	// Every four years, the first Tuesday after a Monday in November, 3 occurrences (U.S. Presidential Election day).
 	r, _ = rrule.NewRRule(rrule.ROption{
-		Freq:       rrule.YEARLY,
+		Freq:       rrule.Yearly,
 		Interval:   4,
 		Count:      3,
 		Bymonth:    []int{11},
-		Byweekday:  []rrule.Weekday{rrule.TU},
+		Byweekday:  []rrule.Weekday{rrule.Tuesday},
 		Bymonthday: []int{2, 3, 4, 5, 6, 7, 8},
 		Dtstart:    time.Date(1996, 11, 5, 9, 0, 0, 0, time.UTC),
 	})
@@ -85,7 +85,7 @@ func ExampleSet() {
 	// Daily, for 7 days, jumping Saturday and Sunday occurrences.
 	set := rrule.Set{}
 	r, _ := rrule.NewRRule(rrule.ROption{
-		Freq:    rrule.DAILY,
+		Freq:    rrule.Daily,
 		Count:   7,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)
@@ -106,7 +106,7 @@ func ExampleSet() {
 	// Weekly, for 4 weeks, plus one time on day 7, and not on day 16.
 	set = rrule.Set{}
 	r, _ = rrule.NewRRule(rrule.ROption{
-		Freq:    rrule.WEEKLY,
+		Freq:    rrule.Weekly,
 		Count:   4,
 		Dtstart: time.Date(1997, 9, 2, 9, 0, 0, 0, time.UTC)})
 	set.RRule(r)

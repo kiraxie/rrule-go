@@ -4,7 +4,10 @@ package rrule
 
 import (
 	"errors"
+	"fmt"
 	"math"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -183,4 +186,88 @@ func after(next Next, dt time.Time, inc bool) time.Time {
 type optInt struct {
 	Int     int
 	Defined bool
+}
+
+func parseDate(s string) (time.Time, error) {
+	if s == "" {
+		return time.Time{}, nil
+	}
+	s = strings.Trim(s, "\"")
+
+	return time.Parse(time.DateTime, s)
+}
+
+func parseIntSlice(s string) (result []int, err error) {
+	if s == "" {
+		return nil, nil
+	}
+	s = strings.Trim(s, "{}")
+	slice := strings.Split(s, ",")
+	for _, v := range slice {
+		var i int
+		if i, err = strconv.Atoi(v); err != nil {
+			return nil, err
+		}
+		result = append(result, i)
+	}
+
+	return
+}
+
+func parseWeekdaySlice(s string) (result []Weekday, err error) {
+	if s == "" {
+		return nil, nil
+	}
+	s = strings.Trim(s, "{}")
+	slice := strings.Split(s, ",")
+	result = make([]Weekday, len(slice))
+	for _, v := range slice {
+		if err := result[0].Parse(v); err != nil {
+			return nil, err
+		}
+	}
+
+	return
+}
+
+func intSliceToStringSlice(s []int) (result []string) {
+	for _, v := range s {
+		result = append(result, fmt.Sprintf("%d", v))
+	}
+
+	return
+}
+
+func weekdaySliceToStringSlice(s []Weekday) (result []string) {
+	for _, v := range s {
+		result = append(result, strconv.Itoa(v.weekday))
+	}
+
+	return
+}
+
+func parseInt(s string) (int, error) {
+	if s == "" {
+		return 0, nil
+	}
+
+	return strconv.Atoi(s)
+}
+
+func parseDateSlice(s string) (result []time.Time, err error) {
+	if s == "" {
+		return nil, nil
+	}
+	s = strings.Trim(s, "\"{}")
+	slice := strings.Split(s, ",")
+	for _, v := range slice {
+		fmt.Println("v:", v)
+		t, err := parseDate(v)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, t)
+	}
+
+	return
 }

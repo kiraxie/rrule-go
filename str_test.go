@@ -11,7 +11,7 @@ func TestRFCRuleToStr(t *testing.T) {
 	nyLoc, _ := time.LoadLocation("America/New_York")
 	dtStart := time.Date(2018, 1, 1, 9, 0, 0, 0, nyLoc)
 
-	r, _ := NewRRule(ROption{Freq: MONTHLY, Dtstart: dtStart})
+	r, _ := NewRRule(ROption{Freq: Monthly, Dtstart: dtStart})
 	want := "DTSTART;TZID=America/New_York:20180101T090000\nRRULE:FREQ=MONTHLY"
 	if r.String() != want {
 		t.Errorf("Expected RFC string %s, got %v", want, r.String())
@@ -22,7 +22,7 @@ func TestRFCSetToString(t *testing.T) {
 	nyLoc, _ := time.LoadLocation("America/New_York")
 	dtStart := time.Date(2018, 1, 1, 9, 0, 0, 0, nyLoc)
 
-	r, _ := NewRRule(ROption{Freq: MONTHLY, Dtstart: dtStart})
+	r, _ := NewRRule(ROption{Freq: Monthly, Dtstart: dtStart})
 	want := "DTSTART;TZID=America/New_York:20180101T090000\nRRULE:FREQ=MONTHLY"
 	if r.String() != want {
 		t.Errorf("Expected RFC string %s, got %v", want, r.String())

@@ -34,60 +34,12 @@ func strToTimeInLoc(str string, loc *time.Location) (time.Time, error) {
 	return time.Parse(DateTimeFormat, str)
 }
 
-func (f Frequency) String() string {
-	return [...]string{
-		"YEARLY", "MONTHLY", "WEEKLY", "DAILY",
-		"HOURLY", "MINUTELY", "SECONDLY"}[f]
-}
-
-func StrToFreq(str string) (Frequency, error) {
-	freqMap := map[string]Frequency{
-		"YEARLY": YEARLY, "MONTHLY": MONTHLY, "WEEKLY": WEEKLY, "DAILY": DAILY,
-		"HOURLY": HOURLY, "MINUTELY": MINUTELY, "SECONDLY": SECONDLY,
-	}
-	result, ok := freqMap[str]
-	if !ok {
-		return 0, errors.New("undefined frequency: " + str)
-	}
-	return result, nil
-}
-
-func (wday Weekday) String() string {
-	s := [...]string{"MO", "TU", "WE", "TH", "FR", "SA", "SU"}[wday.weekday]
-	if wday.n == 0 {
-		return s
-	}
-	return fmt.Sprintf("%+d%s", wday.n, s)
-}
-
-func strToWeekday(str string) (Weekday, error) {
-	if len(str) < 2 {
-		return Weekday{}, errors.New("undefined weekday: " + str)
-	}
-	weekMap := map[string]Weekday{
-		"MO": MO, "TU": TU, "WE": WE, "TH": TH,
-		"FR": FR, "SA": SA, "SU": SU}
-	result, ok := weekMap[str[len(str)-2:]]
-	if !ok {
-		return Weekday{}, errors.New("undefined weekday: " + str)
-	}
-	if len(str) > 2 {
-		n, e := strconv.Atoi(str[:len(str)-2])
-		if e != nil {
-			return Weekday{}, e
-		}
-		result.n = n
-	}
-	return result, nil
-}
-
 func strToWeekdays(value string) ([]Weekday, error) {
 	contents := strings.Split(value, ",")
 	result := make([]Weekday, len(contents))
 	var e error
 	for i, s := range contents {
-		result[i], e = strToWeekday(s)
-		if e != nil {
+		if e = result[i].Parse(s); e != nil {
 			return nil, e
 		}
 	}
@@ -137,7 +89,7 @@ func (option *ROption) RRuleString() string {
 	if option.Interval != 0 {
 		result = append(result, fmt.Sprintf("INTERVAL=%v", option.Interval))
 	}
-	if option.Wkst != MO {
+	if option.Wkst != Monday {
 		result = append(result, fmt.Sprintf("WKST=%v", option.Wkst))
 	}
 	if option.Count != 0 {
@@ -218,14 +170,14 @@ func StrToROptionInLocation(rfcString string, loc *time.Location) (*ROption, err
 		var e error
 		switch key {
 		case "FREQ":
-			result.Freq, e = StrToFreq(value)
+			e = result.Freq.Parse(value)
 			freqSet = true
 		case "DTSTART":
 			result.Dtstart, e = strToTimeInLoc(value, loc)
 		case "INTERVAL":
 			result.Interval, e = strconv.Atoi(value)
 		case "WKST":
-			result.Wkst, e = strToWeekday(value)
+			e = result.Wkst.Parse(value)
 		case "COUNT":
 			result.Count, e = strconv.Atoi(value)
 		case "UNTIL":
